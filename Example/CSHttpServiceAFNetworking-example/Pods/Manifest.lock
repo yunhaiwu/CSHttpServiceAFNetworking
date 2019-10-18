@@ -1,0 +1,37 @@
+PODS:
+  - AFNetworking/NSURLSession (3.2.1):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (3.2.1)
+  - AFNetworking/Security (3.2.1)
+  - AFNetworking/Serialization (3.2.1)
+  - CocoaService (0.0.1):
+    - WJLoggingAPI
+  - CSHttpServiceAPI (1.0.0):
+    - CocoaService
+  - WJLoggingAPI (2.0)
+
+DEPENDENCIES:
+  - AFNetworking/NSURLSession (~> 3.0)
+  - CocoaService
+  - CSHttpServiceAPI (~> 1.0.0)
+  - WJLoggingAPI
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - AFNetworking
+  https://github.com/yunhaiwu/ios-wj-framework-cocoapods-specs.git:
+    - CocoaService
+    - CSHttpServiceAPI
+    - WJLoggingAPI
+
+SPEC CHECKSUMS:
+  AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
+  CocoaService: 73c9f2ff5da6c6a9e1b626937f40a14adc67a1d3
+  CSHttpServiceAPI: 078e517b194a4796bf36785202071ee13da3467f
+  WJLoggingAPI: 183581a351d51f93ec9900a3cc5f2df15b907de3
+
+PODFILE CHECKSUM: 739c92e2e75ec2cf1e7d1aa2ada40a9dd2972eb3
+
+COCOAPODS: 1.7.5

@@ -1,0 +1,17 @@
+source 'https://github.com/CocoaPods/Specs.git'
+source 'https://github.com/yunhaiwu/ios-wj-framework-cocoapods-specs.git'
+
+platform :ios, '8.0'
+
+inhibit_all_warnings!
+
+#use_frameworks!
+
+target :'CSHttpServiceAFNetworking-example' do
+
+pod 'WJLoggingAPI'
+pod 'CocoaService'
+pod 'CSHttpServiceAPI', '~> 1.0.0'
+pod 'AFNetworking/NSURLSession', '~> 3.0'
+
+end

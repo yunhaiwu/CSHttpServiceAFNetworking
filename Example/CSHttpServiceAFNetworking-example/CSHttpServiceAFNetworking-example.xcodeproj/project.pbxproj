@@ -1,0 +1,655 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		5D28BCB44623D4A3A6E97D55 /* libPods-CSHttpServiceAFNetworking-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 973321B19FAA284ECB3EA314 /* libPods-CSHttpServiceAFNetworking-example.a */; };
+		60F8E52D2359876D00675FFB /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E52C2359876D00675FFB /* AppDelegate.m */; };
+		60F8E5332359876D00675FFB /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E5322359876D00675FFB /* ViewController.m */; };
+		60F8E5382359876E00675FFB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 60F8E5372359876E00675FFB /* Assets.xcassets */; };
+		60F8E53B2359876E00675FFB /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 60F8E5392359876E00675FFB /* LaunchScreen.storyboard */; };
+		60F8E53E2359876E00675FFB /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E53D2359876E00675FFB /* main.m */; };
+		60F8E5482359876F00675FFB /* CSHttpServiceAFNetworking_exampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E5472359876F00675FFB /* CSHttpServiceAFNetworking_exampleTests.m */; };
+		60F8E5532359876F00675FFB /* CSHttpServiceAFNetworking_exampleUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E5522359876F00675FFB /* CSHttpServiceAFNetworking_exampleUITests.m */; };
+		60F8E56423598A4000675FFB /* AFNetworkingHttpService.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E56323598A4000675FFB /* AFNetworkingHttpService.m */; };
+		60F8E568235990F200675FFB /* SimpleAFHttpServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E567235990F200675FFB /* SimpleAFHttpServiceRequest.m */; };
+		60F8E56B2359915700675FFB /* SimpleAFHttpServiceResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 60F8E56A2359915700675FFB /* SimpleAFHttpServiceResponse.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		60F8E5442359876F00675FFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60F8E5202359876D00675FFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60F8E5272359876D00675FFB;
+			remoteInfo = "CSHttpServiceAFNetworking-example";
+		};
+		60F8E54F2359876F00675FFB /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 60F8E5202359876D00675FFB /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 60F8E5272359876D00675FFB;
+			remoteInfo = "CSHttpServiceAFNetworking-example";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		1BC0FFC02093CBF1E62309DD /* Pods-CSHttpServiceAFNetworking-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CSHttpServiceAFNetworking-example.release.xcconfig"; path = "Target Support Files/Pods-CSHttpServiceAFNetworking-example/Pods-CSHttpServiceAFNetworking-example.release.xcconfig"; sourceTree = "<group>"; };
+		228E8DE8D27E9BCCE578B022 /* Pods-CSHttpServiceAFNetworking-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CSHttpServiceAFNetworking-example.debug.xcconfig"; path = "Target Support Files/Pods-CSHttpServiceAFNetworking-example/Pods-CSHttpServiceAFNetworking-example.debug.xcconfig"; sourceTree = "<group>"; };
+		60F8E5282359876D00675FFB /* CSHttpServiceAFNetworking-example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CSHttpServiceAFNetworking-example.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60F8E52B2359876D00675FFB /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		60F8E52C2359876D00675FFB /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
+		60F8E5312359876D00675FFB /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
+		60F8E5322359876D00675FFB /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
+		60F8E5372359876E00675FFB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		60F8E53A2359876E00675FFB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		60F8E53C2359876E00675FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60F8E53D2359876E00675FFB /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		60F8E5432359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CSHttpServiceAFNetworking-exampleTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60F8E5472359876F00675FFB /* CSHttpServiceAFNetworking_exampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSHttpServiceAFNetworking_exampleTests.m; sourceTree = "<group>"; };
+		60F8E5492359876F00675FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60F8E54E2359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CSHttpServiceAFNetworking-exampleUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		60F8E5522359876F00675FFB /* CSHttpServiceAFNetworking_exampleUITests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSHttpServiceAFNetworking_exampleUITests.m; sourceTree = "<group>"; };
+		60F8E5542359876F00675FFB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		60F8E5612359897F00675FFB /* CSHttpServiceAFNetworking.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = CSHttpServiceAFNetworking.podspec; path = ../../CSHttpServiceAFNetworking.podspec; sourceTree = "<group>"; };
+		60F8E56223598A4000675FFB /* AFNetworkingHttpService.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFNetworkingHttpService.h; sourceTree = "<group>"; };
+		60F8E56323598A4000675FFB /* AFNetworkingHttpService.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AFNetworkingHttpService.m; sourceTree = "<group>"; };
+		60F8E56523598D0C00675FFB /* AFHttpServiceSessionManagerFactory.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AFHttpServiceSessionManagerFactory.h; sourceTree = "<group>"; };
+		60F8E566235990F200675FFB /* SimpleAFHttpServiceRequest.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAFHttpServiceRequest.h; sourceTree = "<group>"; };
+		60F8E567235990F200675FFB /* SimpleAFHttpServiceRequest.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleAFHttpServiceRequest.m; sourceTree = "<group>"; };
+		60F8E5692359915700675FFB /* SimpleAFHttpServiceResponse.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SimpleAFHttpServiceResponse.h; sourceTree = "<group>"; };
+		60F8E56A2359915700675FFB /* SimpleAFHttpServiceResponse.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SimpleAFHttpServiceResponse.m; sourceTree = "<group>"; };
+		973321B19FAA284ECB3EA314 /* libPods-CSHttpServiceAFNetworking-example.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-CSHttpServiceAFNetworking-example.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		60F8E5252359876D00675FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				5D28BCB44623D4A3A6E97D55 /* libPods-CSHttpServiceAFNetworking-example.a in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E5402359876F00675FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E54B2359876F00675FFB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		124A299BEDA5982E762AAA61 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				228E8DE8D27E9BCCE578B022 /* Pods-CSHttpServiceAFNetworking-example.debug.xcconfig */,
+				1BC0FFC02093CBF1E62309DD /* Pods-CSHttpServiceAFNetworking-example.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		281C84C7D43799C7EE8F303A /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				973321B19FAA284ECB3EA314 /* libPods-CSHttpServiceAFNetworking-example.a */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		60F8E51F2359876D00675FFB = {
+			isa = PBXGroup;
+			children = (
+				60F8E5612359897F00675FFB /* CSHttpServiceAFNetworking.podspec */,
+				60F8E5602359897800675FFB /* CSHttpServiceAFNetworking */,
+				60F8E52A2359876D00675FFB /* CSHttpServiceAFNetworking-example */,
+				60F8E5462359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests */,
+				60F8E5512359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests */,
+				60F8E5292359876D00675FFB /* Products */,
+				124A299BEDA5982E762AAA61 /* Pods */,
+				281C84C7D43799C7EE8F303A /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		60F8E5292359876D00675FFB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				60F8E5282359876D00675FFB /* CSHttpServiceAFNetworking-example.app */,
+				60F8E5432359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests.xctest */,
+				60F8E54E2359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		60F8E52A2359876D00675FFB /* CSHttpServiceAFNetworking-example */ = {
+			isa = PBXGroup;
+			children = (
+				60F8E52B2359876D00675FFB /* AppDelegate.h */,
+				60F8E52C2359876D00675FFB /* AppDelegate.m */,
+				60F8E5312359876D00675FFB /* ViewController.h */,
+				60F8E5322359876D00675FFB /* ViewController.m */,
+				60F8E5372359876E00675FFB /* Assets.xcassets */,
+				60F8E5392359876E00675FFB /* LaunchScreen.storyboard */,
+				60F8E53C2359876E00675FFB /* Info.plist */,
+				60F8E53D2359876E00675FFB /* main.m */,
+			);
+			path = "CSHttpServiceAFNetworking-example";
+			sourceTree = "<group>";
+		};
+		60F8E5462359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests */ = {
+			isa = PBXGroup;
+			children = (
+				60F8E5472359876F00675FFB /* CSHttpServiceAFNetworking_exampleTests.m */,
+				60F8E5492359876F00675FFB /* Info.plist */,
+			);
+			path = "CSHttpServiceAFNetworking-exampleTests";
+			sourceTree = "<group>";
+		};
+		60F8E5512359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests */ = {
+			isa = PBXGroup;
+			children = (
+				60F8E5522359876F00675FFB /* CSHttpServiceAFNetworking_exampleUITests.m */,
+				60F8E5542359876F00675FFB /* Info.plist */,
+			);
+			path = "CSHttpServiceAFNetworking-exampleUITests";
+			sourceTree = "<group>";
+		};
+		60F8E5602359897800675FFB /* CSHttpServiceAFNetworking */ = {
+			isa = PBXGroup;
+			children = (
+				60F8E56223598A4000675FFB /* AFNetworkingHttpService.h */,
+				60F8E56323598A4000675FFB /* AFNetworkingHttpService.m */,
+				60F8E56523598D0C00675FFB /* AFHttpServiceSessionManagerFactory.h */,
+				60F8E566235990F200675FFB /* SimpleAFHttpServiceRequest.h */,
+				60F8E567235990F200675FFB /* SimpleAFHttpServiceRequest.m */,
+				60F8E5692359915700675FFB /* SimpleAFHttpServiceResponse.h */,
+				60F8E56A2359915700675FFB /* SimpleAFHttpServiceResponse.m */,
+			);
+			name = CSHttpServiceAFNetworking;
+			path = ../../CSHttpServiceAFNetworking;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		60F8E5272359876D00675FFB /* CSHttpServiceAFNetworking-example */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60F8E5572359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-example" */;
+			buildPhases = (
+				48DEA896DE8A30A4982865F5 /* [CP] Check Pods Manifest.lock */,
+				60F8E5242359876D00675FFB /* Sources */,
+				60F8E5252359876D00675FFB /* Frameworks */,
+				60F8E5262359876D00675FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "CSHttpServiceAFNetworking-example";
+			productName = "CSHttpServiceAFNetworking-example";
+			productReference = 60F8E5282359876D00675FFB /* CSHttpServiceAFNetworking-example.app */;
+			productType = "com.apple.product-type.application";
+		};
+		60F8E5422359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60F8E55A2359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-exampleTests" */;
+			buildPhases = (
+				60F8E53F2359876F00675FFB /* Sources */,
+				60F8E5402359876F00675FFB /* Frameworks */,
+				60F8E5412359876F00675FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60F8E5452359876F00675FFB /* PBXTargetDependency */,
+			);
+			name = "CSHttpServiceAFNetworking-exampleTests";
+			productName = "CSHttpServiceAFNetworking-exampleTests";
+			productReference = 60F8E5432359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		60F8E54D2359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 60F8E55D2359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-exampleUITests" */;
+			buildPhases = (
+				60F8E54A2359876F00675FFB /* Sources */,
+				60F8E54B2359876F00675FFB /* Frameworks */,
+				60F8E54C2359876F00675FFB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				60F8E5502359876F00675FFB /* PBXTargetDependency */,
+			);
+			name = "CSHttpServiceAFNetworking-exampleUITests";
+			productName = "CSHttpServiceAFNetworking-exampleUITests";
+			productReference = 60F8E54E2359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		60F8E5202359876D00675FFB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 1100;
+				ORGANIZATIONNAME = wuyunhai;
+				TargetAttributes = {
+					60F8E5272359876D00675FFB = {
+						CreatedOnToolsVersion = 11.0;
+					};
+					60F8E5422359876F00675FFB = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 60F8E5272359876D00675FFB;
+					};
+					60F8E54D2359876F00675FFB = {
+						CreatedOnToolsVersion = 11.0;
+						TestTargetID = 60F8E5272359876D00675FFB;
+					};
+				};
+			};
+			buildConfigurationList = 60F8E5232359876D00675FFB /* Build configuration list for PBXProject "CSHttpServiceAFNetworking-example" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 60F8E51F2359876D00675FFB;
+			productRefGroup = 60F8E5292359876D00675FFB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				60F8E5272359876D00675FFB /* CSHttpServiceAFNetworking-example */,
+				60F8E5422359876F00675FFB /* CSHttpServiceAFNetworking-exampleTests */,
+				60F8E54D2359876F00675FFB /* CSHttpServiceAFNetworking-exampleUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		60F8E5262359876D00675FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60F8E53B2359876E00675FFB /* LaunchScreen.storyboard in Resources */,
+				60F8E5382359876E00675FFB /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E5412359876F00675FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E54C2359876F00675FFB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		48DEA896DE8A30A4982865F5 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-CSHttpServiceAFNetworking-example-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		60F8E5242359876D00675FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60F8E56423598A4000675FFB /* AFNetworkingHttpService.m in Sources */,
+				60F8E56B2359915700675FFB /* SimpleAFHttpServiceResponse.m in Sources */,
+				60F8E568235990F200675FFB /* SimpleAFHttpServiceRequest.m in Sources */,
+				60F8E5332359876D00675FFB /* ViewController.m in Sources */,
+				60F8E52D2359876D00675FFB /* AppDelegate.m in Sources */,
+				60F8E53E2359876E00675FFB /* main.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E53F2359876F00675FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60F8E5482359876F00675FFB /* CSHttpServiceAFNetworking_exampleTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		60F8E54A2359876F00675FFB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				60F8E5532359876F00675FFB /* CSHttpServiceAFNetworking_exampleUITests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		60F8E5452359876F00675FFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60F8E5272359876D00675FFB /* CSHttpServiceAFNetworking-example */;
+			targetProxy = 60F8E5442359876F00675FFB /* PBXContainerItemProxy */;
+		};
+		60F8E5502359876F00675FFB /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 60F8E5272359876D00675FFB /* CSHttpServiceAFNetworking-example */;
+			targetProxy = 60F8E54F2359876F00675FFB /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		60F8E5392359876E00675FFB /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				60F8E53A2359876E00675FFB /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		60F8E5552359876F00675FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		60F8E5562359876F00675FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		60F8E5582359876F00675FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 228E8DE8D27E9BCCE578B022 /* Pods-CSHttpServiceAFNetworking-example.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		60F8E5592359876F00675FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1BC0FFC02093CBF1E62309DD /* Pods-CSHttpServiceAFNetworking-example.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-example/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-example";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		60F8E55B2359876F00675FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-exampleTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-exampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CSHttpServiceAFNetworking-example.app/CSHttpServiceAFNetworking-example";
+			};
+			name = Debug;
+		};
+		60F8E55C2359876F00675FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-exampleTests/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-exampleTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CSHttpServiceAFNetworking-example.app/CSHttpServiceAFNetworking-example";
+			};
+			name = Release;
+		};
+		60F8E55E2359876F00675FFB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-exampleUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-exampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "CSHttpServiceAFNetworking-example";
+			};
+			name = Debug;
+		};
+		60F8E55F2359876F00675FFB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = KX4TU8V4ZG;
+				INFOPLIST_FILE = "CSHttpServiceAFNetworking-exampleUITests/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = "com.cocoaservice.CSHttpServiceAFNetworking-exampleUITests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = "CSHttpServiceAFNetworking-example";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		60F8E5232359876D00675FFB /* Build configuration list for PBXProject "CSHttpServiceAFNetworking-example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60F8E5552359876F00675FFB /* Debug */,
+				60F8E5562359876F00675FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60F8E5572359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-example" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60F8E5582359876F00675FFB /* Debug */,
+				60F8E5592359876F00675FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60F8E55A2359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-exampleTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60F8E55B2359876F00675FFB /* Debug */,
+				60F8E55C2359876F00675FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		60F8E55D2359876F00675FFB /* Build configuration list for PBXNativeTarget "CSHttpServiceAFNetworking-exampleUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				60F8E55E2359876F00675FFB /* Debug */,
+				60F8E55F2359876F00675FFB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 60F8E5202359876D00675FFB /* Project object */;
+}
