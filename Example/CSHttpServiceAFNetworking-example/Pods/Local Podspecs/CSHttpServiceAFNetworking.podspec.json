@@ -1,0 +1,37 @@
+{
+  "name": "CSHttpServiceAFNetworking",
+  "version": "1.0.0",
+  "summary": "基于AFNetworking对CSHttpServiceAPI实现.",
+  "description": "http服务组件（AFNetworking）",
+  "homepage": "https://github.com/yunhaiwu",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "吴云海": "halayun@gamil.com"
+  },
+  "platforms": {
+    "ios": "7.0"
+  },
+  "source": {
+    "git": "https://github.com/yunhaiwu/CSHttpServiceAFNetworking.git",
+    "tag": "1.0.0"
+  },
+  "source_files": "CSHttpServiceAFNetworking/*.{h,m}",
+  "exclude_files": "Example",
+  "public_header_files": "CSHttpServiceAFNetworking/*.h",
+  "frameworks": "Foundation",
+  "requires_arc": true,
+  "dependencies": {
+    "CocoaService": [
+
+    ],
+    "CSHttpServiceAPI": [
+      "~>1.0.0"
+    ],
+    "AFNetworking/NSURLSession": [
+      "~> 3.0"
+    ]
+  }
+}
