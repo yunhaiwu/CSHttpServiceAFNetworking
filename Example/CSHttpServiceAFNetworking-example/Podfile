@@ -14,5 +14,5 @@ pod 'CocoaService'
 pod 'CSHttpServiceAPI', '~> 1.0.0'
 pod 'AFNetworking/NSURLSession', '~> 3.0'
 pod 'CSHttpServiceAFNetworking', :path => '../../'
-
+pod 'Masonry', '1.1.0'
 end

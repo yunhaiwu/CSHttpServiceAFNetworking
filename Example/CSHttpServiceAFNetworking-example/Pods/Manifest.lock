@@ -14,6 +14,7 @@ PODS:
     - CSHttpServiceAPI (~> 1.0.0)
   - CSHttpServiceAPI (1.0.0):
     - CocoaService
+  - Masonry (1.1.0)
   - WJLoggingAPI (2.0)
 
 DEPENDENCIES:
@@ -21,11 +22,13 @@ DEPENDENCIES:
   - CocoaService
   - CSHttpServiceAFNetworking (from `../../`)
   - CSHttpServiceAPI (~> 1.0.0)
+  - Masonry
   - WJLoggingAPI
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - AFNetworking
+    - Masonry
   https://github.com/yunhaiwu/ios-wj-framework-cocoapods-specs.git:
     - CocoaService
     - CSHttpServiceAPI
@@ -40,8 +43,9 @@ SPEC CHECKSUMS:
   CocoaService: 73c9f2ff5da6c6a9e1b626937f40a14adc67a1d3
   CSHttpServiceAFNetworking: 1b86936be51a993be9404a66af2b999bb63b72ff
   CSHttpServiceAPI: 078e517b194a4796bf36785202071ee13da3467f
+  Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   WJLoggingAPI: 183581a351d51f93ec9900a3cc5f2df15b907de3
 
-PODFILE CHECKSUM: e31abeaf96ef4a79bca09f7512af19f568d076a7
+PODFILE CHECKSUM: 0b52fbcb8cdbc997f220bf76a6efb72e675098fe
 
 COCOAPODS: 1.7.5
