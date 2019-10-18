@@ -1,9 +1,9 @@
 //
 //  AFNetworkingHttpService.m
-//  CSHttpServiceAFNetworking-example
+//  CSHttpServiceAFNetworking
 //
-//  Created by wuyunhai on 2019/10/18.
-//  Copyright © 2019 wuyunhai. All rights reserved.
+//  Created by 吴云海
+//  Copyright © 2018年 yunhai.wu. All rights reserved.
 //
 
 #import "AFNetworkingHttpService.h"
