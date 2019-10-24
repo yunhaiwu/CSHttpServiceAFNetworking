@@ -15,6 +15,8 @@
 
 @property (nonatomic, weak) UILabel *responseLabel;
 
+@property (nonatomic, strong) id<CSHttpTask> httpTask;
+
 @end
 
 @implementation ViewController

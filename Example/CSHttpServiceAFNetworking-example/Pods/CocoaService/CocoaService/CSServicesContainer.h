@@ -8,8 +8,9 @@
 
 #import <Foundation/Foundation.h>
 #import "CSServiceRegisterDefine.h"
+#import "CSApplicationPlugin.h"
 
-@interface CSServicesContainer : NSObject
+@interface CSServicesContainer : NSObject<CSApplicationPlugin>
 
 - (id)fetchService:(Protocol*)protocol serviceId:(NSString*)serviceId;
 

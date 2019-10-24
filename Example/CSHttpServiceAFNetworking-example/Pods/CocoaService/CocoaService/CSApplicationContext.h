@@ -9,33 +9,37 @@
 #import <Foundation/Foundation.h>
 #import "CSServiceRegisterDefine.h"
 #import "CSAspectRegisterDefine.h"
+#import "CSSafeDictionary.h"
 
+/*
+ 应用程序上下文环境
+ */
 @protocol CSApplicationContext <NSObject>
 
-- (void)batchRegisterServices:(NSSet<id<CSServiceRegisterDefine>>*)serviceDefines;
+- (void)batchRegisterServices:(NSSet<__kindof id<CSServiceRegisterDefine>>* _Nonnull )serviceDefines;
 
-- (void)registerService:(id<CSServiceRegisterDefine>)serviceDefine;
+- (void)registerService:(id<CSServiceRegisterDefine> _Nonnull)serviceDefine;
 
-- (void)registerService:(Protocol*)protocol serviceClass:(Class)serviceClass;
+- (void)registerService:(Protocol* _Nonnull )protocol serviceClass:(Class _Nonnull)serviceClass;
 
-- (id)fetchService:(Protocol*)protocol serviceId:(NSString*)serviceId;
+- (id _Nullable)fetchService:(Protocol* _Nonnull )protocol serviceId:(NSString* _Nullable )serviceId;
 
-- (id)fetchService:(Protocol*)protocol;
+- (id _Nullable)fetchService:(Protocol* _Nonnull )protocol;
 
-- (NSArray*)fetchServiceList:(Protocol*)protocol;
+- (NSArray* _Nullable)fetchServiceList:(Protocol* _Nonnull )protocol;
 
-- (Class)fetchServiceClass:(Protocol*)protocol;
+- (Class _Nullable)fetchServiceClass:(Protocol* _Nonnull )protocol;
 
-- (NSArray<Class>*)fetchServiceClassList:(Protocol*)protocol;
+- (NSArray<Class>* _Nullable)fetchServiceClassList:(Protocol* _Nonnull )protocol;
 
-- (void)registerModule:(Class)modClass;
+- (void)registerModule:(Class _Nonnull)modClass;
 
-- (void)unRegisterModule:(Class)modClass;
+- (void)unRegisterModule:(Class _Nonnull)modClass;
 
-- (id)fetchServiceProxy:(id)targetService;
+- (id _Nullable)fetchServiceProxy:(id _Nullable)targetService;
 
-- (void)registerAspect:(Class)aspectClass;
+- (void)registerAspect:(Class _Nonnull)aspectClass;
 
-- (void)batchRegisterAspects:(NSSet<id<CSAspectRegisterDefine>>*)aspects;
+- (void)batchRegisterAspects:(NSSet<__kindof id<CSAspectRegisterDefine>>* _Nonnull)aspects;
 
 @end

@@ -18,7 +18,7 @@
 
 @interface CSAnnotation ()
 
-@property (nonatomic, strong) NSMutableSet<NSString*> *moduleDefines, *serviceDefines, *appFirstViewControllerDefines;
+@property (nonatomic, strong) NSMutableSet<NSString*> *moduleDefines, *serviceDefines, *firstViewControllerDefines, *applicationPluginDefines;
 
 @property (nonatomic, strong) NSMutableSet<NSString*> *aspectDefines;
 
@@ -49,11 +49,18 @@
     return _aspectDefines;
 }
 
-- (NSMutableSet<NSString *> *)appFirstViewControllerDefines {
-    if (!_appFirstViewControllerDefines) {
-        _appFirstViewControllerDefines = [[NSMutableSet alloc] init];
+- (NSMutableSet<NSString *> *)applicationPluginDefines {
+    if (!_applicationPluginDefines) {
+        _applicationPluginDefines = [[NSMutableSet alloc] init];
     }
-    return _appFirstViewControllerDefines;
+    return _applicationPluginDefines;
+}
+
+- (NSMutableSet<NSString *> *)firstViewControllerDefines {
+    if (!_firstViewControllerDefines) {
+        _firstViewControllerDefines = [[NSMutableSet alloc] init];
+    }
+    return _firstViewControllerDefines;
 }
 
 + (instancetype)sharedInstance {
@@ -77,22 +84,29 @@
     return _aspectDefines;
 }
 
-- (NSSet<NSString*>*)fetchAnnotationAppFirstViewControllerDefines {
-    return _appFirstViewControllerDefines;
+- (NSSet<NSString*>*)fetchAnnotationFirstViewControllerDefines {
+    return _firstViewControllerDefines;
 }
 
-- (void)appendModDefines:(NSArray<NSString*>*)mods serviceDefines:(NSArray<NSString*>*)sers aspectDefines:(NSArray<NSString*>*)asps viewControllers:(NSArray<NSString*>*)viewControllers {
-    if ([mods count]) {
-        [self.moduleDefines addObjectsFromArray:mods];
+- (NSSet<NSString*>*)fetchAnnotationApplicationPluginDefines {
+    return _applicationPluginDefines;
+}
+
+- (void)appendModDefines:(NSArray<NSString*>*)modDefines serviceDefines:(NSArray<NSString*>*)serviceDefines aspectDefines:(NSArray<NSString*>*)aspectDefines applicationPluginDefines:(NSArray<NSString*>*)applicationPluginDefines viewControllers:(NSArray<NSString*>*)viewControllers {
+    if ([modDefines count]) {
+        [self.moduleDefines addObjectsFromArray:modDefines];
     }
-    if ([sers count]) {
-        [self.serviceDefines addObjectsFromArray:sers];
+    if ([serviceDefines count]) {
+        [self.serviceDefines addObjectsFromArray:serviceDefines];
     }
-    if ([asps count]) {
-        [self.aspectDefines addObjectsFromArray:asps];
+    if ([aspectDefines count]) {
+        [self.aspectDefines addObjectsFromArray:aspectDefines];
+    }
+    if ([applicationPluginDefines count]) {
+        [self.applicationPluginDefines addObjectsFromArray:applicationPluginDefines];
     }
     if ([viewControllers count]) {
-        [self.appFirstViewControllerDefines addObjectsFromArray:viewControllers];
+        [self.firstViewControllerDefines addObjectsFromArray:viewControllers];
     }
 }
 
@@ -119,7 +133,7 @@ NSArray<NSString *>* WJReadConfiguration(char *sectionName,const struct mach_hea
 }
 
 static void dyld_add_image_callback(const struct mach_header *mh, intptr_t vmaddr_slide) {
-    [[[CSMonitorContext sharedInstance] timeProfiler] beginAnnotationRead];
+    [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginAnnotationRead];
     Dl_info image_info;
     if (dladdr(mh, &image_info)) {
 #if TARGET_OS_SIMULATOR
@@ -128,8 +142,9 @@ static void dyld_add_image_callback(const struct mach_header *mh, intptr_t vmadd
             NSArray<NSString*> *modules = WJReadConfiguration(CSModuleSectionName, mh);
             NSArray<NSString*> *services = WJReadConfiguration(CSServiceSectionName, mh);
             NSArray<NSString*> *aspects = WJReadConfiguration(CSAspectSectionName, mh);
-            NSArray<NSString*> *viewControllers = WJReadConfiguration(CSAppFirstViewControllerSectionName, mh);
-            [[CSAnnotation sharedInstance] appendModDefines:modules serviceDefines:services aspectDefines:aspects viewControllers:viewControllers];
+            NSArray<NSString*> *plugins = WJReadConfiguration(CSApplicationPluginSectionName, mh);
+            NSArray<NSString*> *viewControllers = WJReadConfiguration(CSFirstViewControllerSectionName, mh);
+            [[CSAnnotation sharedInstance] appendModDefines:modules serviceDefines:services aspectDefines:aspects applicationPluginDefines:plugins viewControllers:viewControllers];
         }
 #else
         char main_lib_name_prefix[] = "/var";
@@ -138,12 +153,13 @@ static void dyld_add_image_callback(const struct mach_header *mh, intptr_t vmadd
             NSArray<NSString*> *modules = WJReadConfiguration(CSModuleSectionName, mh);
             NSArray<NSString*> *services = WJReadConfiguration(CSServiceSectionName, mh);
             NSArray<NSString*> *aspects = WJReadConfiguration(CSAspectSectionName, mh);
-            NSArray<NSString*> *viewControllers = WJReadConfiguration(CSAppFirstViewControllerSectionName, mh);
-            [[CSAnnotation sharedInstance] appendModDefines:modules serviceDefines:services aspectDefines:aspects viewControllers:viewControllers];
+            NSArray<NSString*> *plugins = WJReadConfiguration(CSApplicationPluginSectionName, mh);
+            NSArray<NSString*> *viewControllers = WJReadConfiguration(CSFirstViewControllerSectionName, mh);
+            [[CSAnnotation sharedInstance] appendModDefines:modules serviceDefines:services aspectDefines:aspects applicationPluginDefines:plugins viewControllers:viewControllers];
         }
 #endif
     }
-    [[[CSMonitorContext sharedInstance] timeProfiler] endAnnotationRead];
+    [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endAnnotationRead];
 }
 
 __attribute__((constructor))

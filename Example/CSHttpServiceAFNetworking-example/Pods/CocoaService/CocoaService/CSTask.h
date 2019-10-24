@@ -8,17 +8,25 @@
 
 #import <Foundation/Foundation.h>
 
+///*
+// 任务类型
+// */
+//typedef NS_ENUM(NSInteger, CSTaskType) {
+//
+//    CSTaskTypeAppLaunchedAfter = 0,
+//
+//};
+
 @protocol CSTask <NSObject>
 
-/**
+/*
  是否异步任务
  */
 - (BOOL)isAsync;
 
-/**
- 触发任务
+/*
+ 任务触发
  */
 - (void)trigger;
-
 
 @end

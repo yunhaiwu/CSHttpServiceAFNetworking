@@ -11,11 +11,11 @@
 #import "CSAspectContext.h"
 #import "CSAspectRegisterDefine.h"
 #import "CSAspectServiceProxy.h"
-
+#import "CSApplicationPlugin.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CSAspectContainer : NSObject
+@interface CSAspectContainer : NSObject<CSApplicationPlugin>
 
 - (void)registerAspect:(id<CSAspectRegisterDefine>)aspectRegisterDefine;
 

@@ -7,7 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CSHttpFileUpload.h"
+#import "CSHttpFileUploadModel.h"
 
 typedef NS_ENUM(NSInteger, CSHTTPMethod) {
     CSHTTPMethodGET = 0,
@@ -54,7 +54,7 @@ typedef NS_ENUM(NSInteger, CSHTTPMethod) {
 /**
  上传文件
  */
-- (NSArray<CSHttpFileUpload*>*)uploadFiles;
+- (NSArray<CSHttpFileUploadModel*>*)uploadFiles;
 
 /**
  验证参数

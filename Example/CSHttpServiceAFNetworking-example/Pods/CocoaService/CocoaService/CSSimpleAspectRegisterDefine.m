@@ -23,7 +23,7 @@
 @implementation CSSimpleAspectRegisterDefine
 
 - (BOOL)isEqual:(id)object {
-    if (self.class == [object class]) {
+    if ([object isKindOfClass:[self class]]) {
         if ([self aspectClass] == [object aspectClass]) {
             return YES;
         }
@@ -72,7 +72,7 @@
             _moduleId = [[_aspectClass belongModuleId] copy];
         }
         if (!_moduleId) {
-            _moduleId = CSAppGlobalDefaultModuleId;
+            _moduleId = CSApplicationCoreModuleId;
         }
     }
     return _moduleId;

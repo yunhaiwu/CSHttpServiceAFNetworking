@@ -43,7 +43,7 @@
 
 
 - (BOOL)isEqual:(id)object {
-    if (self.class == [object class]) {
+    if ([object isKindOfClass:[self class]]) {
         if ([self serviceProtocol] == [object serviceProtocol]) {
             return YES;
         }

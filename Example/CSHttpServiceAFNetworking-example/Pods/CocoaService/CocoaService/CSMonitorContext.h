@@ -7,15 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
-#import "CSMonitorTimeProfiler+CocoaService.h"
+#import "CSMonitorTimeProfiler.h"
+#import "CSMonitorApplicationTimeProfiler.h"
 
 /**
  应用程序监控
  */
 @interface CSMonitorContext : NSObject
 
-+ (instancetype)sharedInstance;
++ (instancetype _Nonnull)sharedInstance;
 
-- (CSMonitorTimeProfiler*)timeProfiler;
+@property (nonatomic, strong, readonly) CSMonitorTimeProfiler * _Nonnull timeProfiler;
+
+@property (nonatomic, strong, readonly) CSMonitorApplicationTimeProfiler * _Nonnull applicationTimeProfiler;
 
 @end

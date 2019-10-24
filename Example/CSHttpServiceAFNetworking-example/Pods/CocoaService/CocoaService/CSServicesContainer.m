@@ -13,6 +13,7 @@
 #import "CSServiceContext.h"
 #import <WJLoggingAPI/WJLoggingAPI.h>
 #import "NSObject+CSService.h"
+#import "CSApplicationPreloadDataManager.h"
 
 @interface CSServicesContainer ()
 
@@ -29,6 +30,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        WJLogDebug(@"✅ service container initialize ......");
         self.serviceIdToServiceWrapper = [[CSSafeDictionary alloc] init];
         self.protocolToServiceContext = [[CSSafeDictionary alloc] init];
         self.moduleIdToServiceIds = [[CSSafeDictionary alloc] init];
@@ -161,6 +163,24 @@
             WJLogDebug(@"❌ register service fail, class '%@' not implementation '%@' protocol", NSStringFromClass(serviceClass), protocolName);
         }
     }
+}
+
+#pragma mark CSApplicationPlugin
++ (id<CSApplicationPlugin>)sharedPlugin {
+    return [CSServicesContainer new];
+}
+
+- (void)applicationContext:(id<CSApplicationContext>)applicationContext moduleWillLoad:(id<CSModuleContext>)moduleContext {
+    NSString *moduleId = [moduleContext moduleId];
+    NSSet<id<CSServiceRegisterDefine>>* serviceDefines = [[CSApplicationPreloadDataManager sharedInstance] getServiceRegisterDefineSet:moduleId];
+    if ([serviceDefines count]) {
+        [self batchRegisterServices:serviceDefines];
+    }
+}
+
+- (void)applicationContext:(id<CSApplicationContext>)applicationContext moduleDidDestroy:(id<CSModuleContext>)moduleContext {
+    NSString *moduleId = [moduleContext moduleId];
+    [self remvoeServicesByModuleId:moduleId];
 }
 
 @end

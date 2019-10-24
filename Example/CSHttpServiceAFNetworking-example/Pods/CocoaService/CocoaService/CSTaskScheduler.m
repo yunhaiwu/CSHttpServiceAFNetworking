@@ -30,15 +30,8 @@
 
 @implementation CSTaskScheduler
 
-- (void)hookAppFirstViewControllersViewDidAppear {
-    NSSet<id<CSAppFirstViewControllerDefine>>* vcDefineSet = [[CSApplicationPreloadDataManager sharedInstance] getAppFirstViewControllerDefineSet];
-    if ([vcDefineSet count]) {
-        NSEnumerator<id<CSAppFirstViewControllerDefine>> *enumerator = [vcDefineSet objectEnumerator];
-        id<CSAppFirstViewControllerDefine> define = nil;
-        while (define = [enumerator nextObject]) {
-            [CSRuntimeTool swizzleInstanceMethodWithClass:[define viewControllerClass] orginalMethod:@selector(viewDidAppear:) replaceMethod:@selector(taskScheduler_viewDidAppear:)];
-        }
-    }
+- (void)hookFirstViewControllersViewDidAppear {
+    [CSRuntimeTool swizzleInstanceMethodWithClass:[UIViewController class] orginalMethod:@selector(viewDidAppear:) replaceMethod:@selector(taskScheduler_viewDidAppear:)];
 }
 
 + (instancetype)sharedInstance {
@@ -46,7 +39,7 @@
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedObject = [[CSTaskScheduler alloc] init];
-        [sharedObject hookAppFirstViewControllersViewDidAppear];
+        [sharedObject hookFirstViewControllersViewDidAppear];
     });
     return sharedObject;
 }
@@ -54,8 +47,8 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.taskQueue = [[CSSafeQueue alloc] initWithMaxSize:100];
-        self.task_execution_queue = dispatch_queue_create("com.cocoaservice.scheduler.queue", DISPATCH_QUEUE_SERIAL);
+        self.taskQueue = [[CSSafeQueue alloc] init];
+        self.task_execution_queue = dispatch_queue_create("com.cocoaservice.task.scheduler.queue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
@@ -65,7 +58,7 @@
 }
 
 - (void)addBlockTask:(CSTaskBlock)taskBlock isAsync:(BOOL)isAsync {
-    CSTaskBlockTask *task = [[CSTaskBlockTask alloc] initWithBlock:taskBlock async:isAsync];
+    CSBlockTask *task = [[CSBlockTask alloc] initWithBlock:taskBlock async:isAsync];
     [self addTask:task];
 }
 
@@ -74,12 +67,12 @@
 }
 
 - (void)addTargetTask:(id)target action:(SEL)action isAsync:(BOOL)isAsync {
-    CSTaskTargetActionTask *task = [[CSTaskTargetActionTask alloc] initWithTarget:target action:action async:isAsync];
+    CSTargetActionTask *task = [[CSTargetActionTask alloc] initWithTarget:target action:action async:isAsync];
     [self addTask:task];
 }
 
 - (void)addTask:(id<CSTask>)task {
-    if (_isApplicationLaunched) {
+    if (_isAppLaunched) {
         [self handleTask:task];
     } else {
         [self.taskQueue put:task];
@@ -87,30 +80,45 @@
 }
 
 - (void)handleTask:(id<CSTask>)task {
-    @try {
-        if ([task isAsync]) {
-            dispatch_async(self.task_execution_queue, ^{
+    if ([task isAsync]) {
+        dispatch_async(self.task_execution_queue, ^{
+            @try {
                 [task trigger];
-            });
-        } else {
+            } @catch (NSException *exception) {
+                WJLogError(@"❌ TaskScheduler perform task exction:%@", exception);
+            }
+        });
+    } else {
+        @try {
             [task trigger];
+        } @catch (NSException *exception) {
+            WJLogError(@"❌ TaskScheduler perform task exction:%@", exception);
         }
-    } @catch (NSException *exception) {
-        WJLogError(@"❌ TaskScheduler perform task exction:%@", exception);
     }
+    
 }
 
 - (void)triggerScheduleTasks {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        [[[CSMonitorContext sharedInstance] timeProfiler] endAppLaunched];
-        [self willChangeValueForKey:@"isApplicationLaunched"];
-        _isApplicationLaunched = YES;
-        [self didChangeValueForKey:@"isApplicationLaunched"];
+        //重新交换UIViewController的viewDidAppear:
+        [self hookFirstViewControllersViewDidAppear];
+        [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endApplicationLaunched];
+        [self willChangeValueForKey:@"isAppLaunched"];
+        _isAppLaunched = YES;
+        [self didChangeValueForKey:@"isAppLaunched"];
         while (![self.taskQueue isEmpty]) {
             id<CSTask> task = [self.taskQueue poll];
             [self handleTask:task];
         }
+#ifdef DEBUG
+        //application loading report info
+        [self addBlockTask:^{
+            [[[CSMonitorContext sharedInstance] applicationTimeProfiler] getApplicationTimeProfileLogReport:^(NSString * logReport) {
+                WJLogDebug(@"%@", logReport);
+            }];
+        }];
+#endif
     });
 }
 
@@ -120,7 +128,15 @@
 
 -(void)taskScheduler_viewDidAppear:(BOOL)animated {
     [self taskScheduler_viewDidAppear:animated];
-    [[CSTaskScheduler sharedInstance] triggerScheduleTasks];
+    if (![[CSTaskScheduler sharedInstance] isAppLaunched]) {
+        if ([[CSApplicationPreloadDataManager sharedInstance] getFirstViewControllerClassSet]) {
+            if ([[[CSApplicationPreloadDataManager sharedInstance] getFirstViewControllerClassSet] containsObject:[self class]]) {
+                [[CSTaskScheduler sharedInstance] triggerScheduleTasks];
+            }
+        } else {
+            [[CSTaskScheduler sharedInstance] triggerScheduleTasks];
+        }
+    }
 }
 
 @end

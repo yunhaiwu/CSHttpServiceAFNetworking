@@ -14,8 +14,8 @@
 #import "CSSimpleModuleRegisterDefine.h"
 #import "CSSimpleServiceRegisterDefine.h"
 #import "CSMonitorContext.h"
-#import "CSSimpleAppFristViewControllerDefine.h"
 #import "CSSimpleAspectRegisterDefine.h"
+#import "CSSimpleApplicationPluginDefine.h"
 
 @interface CSApplicationPreloadDataManager ()
 
@@ -25,7 +25,9 @@
 
 @property (nonatomic, copy) NSDictionary<NSString*, NSDictionary<NSString*, CSSimpleServiceRegisterDefine*>*> *moduleIdToServiceDefinesDict;
 
-@property (nonatomic, copy) NSSet<CSSimpleAppFristViewControllerDefine*> *appFirstVCDefineSet;
+@property (nonatomic, copy) NSSet<Class> *firstViewControllerClassSet;
+
+@property (nonatomic, copy) NSSet<CSSimpleApplicationPluginDefine*> *applicationPluginDefineSet;
 
 @end
 
@@ -51,9 +53,9 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [[[CSMonitorContext sharedInstance] timeProfiler] beginAppDataPreload];
+        [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginApplicationDataPreload];
         [self loadAnnotationPreloadDatas];
-        [[[CSMonitorContext sharedInstance] timeProfiler] endAppDataPreload];
+        [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endApplicationDataPreload];
     }
     return self;
 }
@@ -76,7 +78,7 @@
                 serviceClass = NSClassFromString(serviceClassName);
                 moduleId = [serviceClass belongModuleId];
             }
-            if (!moduleId) moduleId = CSAppGlobalDefaultModuleId;
+            if (!moduleId) moduleId = CSApplicationCoreModuleId;
             
             if ([serviceClass conformsToProtocol:serviceProtocol]) {
                 NSMutableDictionary<NSString*, CSSimpleServiceRegisterDefine*> *protocolToDefines = moduleIdToDefines[moduleId];
@@ -126,24 +128,41 @@
         self.moduleDefineSet = modDefineSet;
     }
     
-    NSSet<NSString*> *viewControllerClassNameSet = [[CSAnnotation sharedInstance] fetchAnnotationAppFirstViewControllerDefines];
-    if ([viewControllerClassNameSet count]) {
-        NSMutableSet<CSSimpleAppFristViewControllerDefine*> *appFirstDefineSet = [[NSMutableSet alloc] init];
-        NSEnumerator<NSString*> *enumerator = [viewControllerClassNameSet objectEnumerator];
-        NSString *viewControllerClassName = nil;
-        while (viewControllerClassName = [enumerator nextObject]) {
-            Class vcClass = NSClassFromString(viewControllerClassName);
-            CSSimpleAppFristViewControllerDefine *define = [CSSimpleAppFristViewControllerDefine buildDefine:vcClass];
-            if (define) [appFirstDefineSet addObject:define];
+    NSSet *applicationPluginDefines = [[CSAnnotation sharedInstance] fetchAnnotationApplicationPluginDefines];
+    if ([applicationPluginDefines count] > 0) {
+        NSMutableSet<CSSimpleApplicationPluginDefine*> *pluginDefineSet = [[NSMutableSet alloc] init];
+        for (NSString *pluginClassName in applicationPluginDefines) {
+            CSSimpleApplicationPluginDefine *define = [CSSimpleApplicationPluginDefine buildDefine:NSClassFromString(pluginClassName)];
+            if (define) {
+                [pluginDefineSet addObject:define];
+            }
         }
-        self.appFirstVCDefineSet = appFirstDefineSet;
+        self.applicationPluginDefineSet = pluginDefineSet;
+    }
+    
+    NSSet<NSString*> *viewControllerClassNameSet = [[CSAnnotation sharedInstance] fetchAnnotationFirstViewControllerDefines];
+    if ([viewControllerClassNameSet count]) {
+        NSMutableSet<Class> *firstViewControllerSet = [[NSMutableSet alloc] init];
+        for (NSString *vcClassName in viewControllerClassNameSet) {
+            Class vcClass = NSClassFromString(vcClassName);
+            if ([vcClass isSubclassOfClass:[UIViewController class]]) {
+                [firstViewControllerSet addObject:vcClass];
+            } else {
+                WJLogError(@"❌ '%@' 'CSFirstViewController' annotation it has to be a 'UIViewController' subclass", vcClassName);
+            }
+        }
+        self.firstViewControllerClassSet = firstViewControllerSet;
     } else {
-        WJLogError(@"❌ application needs configured 'CSAppFirstViewController' annotations ");
+        WJLogError(@"❌ application needs configured 'CSFirstViewController' annotations ");
     }
 }
 
-- (NSSet<id<CSAppFirstViewControllerDefine>>*)getAppFirstViewControllerDefineSet {
-    return _appFirstVCDefineSet;
+- (NSSet<id<CSApplicationPluginDefine>>*)getApplicationPluginDefineSet {
+    return _applicationPluginDefineSet;
+}
+
+- (NSSet<Class>*)getFirstViewControllerClassSet {
+    return _firstViewControllerClassSet;
 }
 
 - (id<CSModuleRegisterDefine>)generateModuleRegisterDefine:(Class<CSModule>)modClass {

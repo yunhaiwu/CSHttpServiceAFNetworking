@@ -6,13 +6,9 @@ PODS:
   - AFNetworking/Reachability (3.2.1)
   - AFNetworking/Security (3.2.1)
   - AFNetworking/Serialization (3.2.1)
-  - CocoaService (0.0.1):
+  - CocoaService (0.0.2):
     - WJLoggingAPI
-  - CSHttpServiceAFNetworking (1.0.0):
-    - AFNetworking/NSURLSession (~> 3.0)
-    - CocoaService
-    - CSHttpServiceAPI (~> 1.0.0)
-  - CSHttpServiceAPI (1.0.0):
+  - CSHttpServiceAPI (1.0.1):
     - CocoaService
   - Masonry (1.1.0)
   - WJLoggingAPI (2.0)
@@ -20,9 +16,8 @@ PODS:
 DEPENDENCIES:
   - AFNetworking/NSURLSession (~> 3.0)
   - CocoaService
-  - CSHttpServiceAFNetworking (from `../../`)
   - CSHttpServiceAPI (~> 1.0.0)
-  - Masonry
+  - Masonry (= 1.1.0)
   - WJLoggingAPI
 
 SPEC REPOS:
@@ -34,18 +29,13 @@ SPEC REPOS:
     - CSHttpServiceAPI
     - WJLoggingAPI
 
-EXTERNAL SOURCES:
-  CSHttpServiceAFNetworking:
-    :path: "../../"
-
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
-  CocoaService: 73c9f2ff5da6c6a9e1b626937f40a14adc67a1d3
-  CSHttpServiceAFNetworking: 1b86936be51a993be9404a66af2b999bb63b72ff
-  CSHttpServiceAPI: 078e517b194a4796bf36785202071ee13da3467f
+  CocoaService: 4a58e08a268e9243f810a43757d0426851870e0a
+  CSHttpServiceAPI: cbacb15809d0b922d58f396257e658d326f74b09
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   WJLoggingAPI: 183581a351d51f93ec9900a3cc5f2df15b907de3
 
-PODFILE CHECKSUM: 0b52fbcb8cdbc997f220bf76a6efb72e675098fe
+PODFILE CHECKSUM: 394e7d1c88095935723dc95f37559365ce3da9fb
 
 COCOAPODS: 1.7.5

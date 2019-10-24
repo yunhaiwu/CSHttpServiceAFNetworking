@@ -10,21 +10,7 @@
 #define CSMacroDefines_h
 
 //应用程序全局模块id
-extern NSString *const CSAppGlobalDefaultModuleId;
-
-//应用程序模块即将卸载通知
-extern NSString *const CSApplicationContextModuleWillDestroyNotification;
-
-//应用程序模块完成卸载通知
-extern NSString *const CSApplicationContextModuleDidDestroyNotification;
-
-//应用程序模块即将加载通知
-extern NSString *const CSApplicationContextModuleWillLoadNotification;
-
-//应用程序模块完成加载通知
-extern NSString *const CSApplicationContextModuleDidLoadNotification;
-
-
+extern NSString *const CSApplicationCoreModuleId;
 
 #define CSMacroPerform1ArgumentsMethod(_0, NAME, ...)                                      NAME
 #define CSMacroPerform2ArgumentsMethod(_0, _1, NAME, ...)                                  NAME

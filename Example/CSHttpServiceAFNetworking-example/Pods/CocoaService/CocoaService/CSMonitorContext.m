@@ -8,21 +8,13 @@
 
 #import "CSMonitorContext.h"
 
-
-
-@interface CSMonitorContext ()
-
-@property (nonatomic, strong) CSMonitorTimeProfiler *timeProfiler;
-
-@end
-
-
 @implementation CSMonitorContext
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        self.timeProfiler = [[CSMonitorTimeProfiler alloc] init];
+        _timeProfiler = [[CSMonitorTimeProfiler alloc] init];
+        _applicationTimeProfiler = [[CSMonitorApplicationTimeProfiler alloc] initWithTimeProfiler:_timeProfiler];
     }
     return self;
 }
@@ -34,10 +26,6 @@
         sharedObject = [[CSMonitorContext alloc] init];
     });
     return sharedObject;
-}
-
-- (CSMonitorTimeProfiler *)timeProfiler {
-    return _timeProfiler;
 }
 
 @end

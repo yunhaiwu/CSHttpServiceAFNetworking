@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "CSServiceRegisterDefine.h"
 #import "CSModuleRegisterDefine.h"
-#import "CSAppFirstViewControllerDefine.h"
 #import "CSAspectRegisterDefine.h"
+#import "CSApplicationPluginDefine.h"
 
 /**
  应用程序预加载管理
@@ -24,9 +24,14 @@ __attribute__((objc_subclassing_restricted))
 + (instancetype)sharedInstance;
 
 /*
+ 获取插件定义
+ */
+- (NSSet<id<CSApplicationPluginDefine>>*)getApplicationPluginDefineSet;
+
+/*
  应用程序第一个出现的VC集合
  */
-- (NSSet<id<CSAppFirstViewControllerDefine>>*)getAppFirstViewControllerDefineSet;
+- (NSSet<Class>*)getFirstViewControllerClassSet;
 
 /**
  获取有用程序全局默认模块定义

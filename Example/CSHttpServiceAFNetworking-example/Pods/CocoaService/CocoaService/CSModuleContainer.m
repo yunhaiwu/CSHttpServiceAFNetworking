@@ -15,14 +15,6 @@
 #import <WJLoggingAPI/WJLoggingAPI.h>
 #import "CSMonitorContext.h"
 
-NSString *const CSApplicationContextModuleWillDestroyNotification = @"CSApplicationContextModuleWillDestroyNotification";
-
-NSString *const CSApplicationContextModuleDidDestroyNotification = @"CSApplicationContextModuleDidDestroyNotification";
-
-NSString *const CSApplicationContextModuleWillLoadNotification = @"CSApplicationContextModuleWillLoadNotification";
-
-NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationContextModuleDidLoadNotification";
-
 
 @interface CSModuleContainer ()
 
@@ -44,6 +36,7 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
 - (instancetype)initWithApplicationContext:(id<CSApplicationContext>)applicationContext delegate:(id<CSModuleContainerDelegate>)delegate {
     self = [super init];
     if (self) {
+        WJLogDebug(@"✅ module container initialize ......");
         self.module_register_semaphore = dispatch_semaphore_create(1);
         self.applicationContext = applicationContext;
         self.delegate = delegate;
@@ -51,7 +44,7 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
         self.launchedAfterNeedsLoadModules = [[NSMutableArray alloc] init];
         //添加调度任务
         [[CSTaskScheduler sharedInstance] addBlockTask:^{
-            [[[CSMonitorContext sharedInstance] timeProfiler] beginAppModuleLoadingLaunchedAfter];
+            [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginApplicationLaunchedAfterModulesLoading];
             NSArray<id<CSModuleRegisterDefine>> *sortedModRegisterDefines = [self.launchedAfterNeedsLoadModules sortedArrayUsingComparator:^NSComparisonResult(id<CSModuleRegisterDefine>  _Nonnull obj1, id<CSModuleRegisterDefine>  _Nonnull obj2) {
                 if ([obj1 modulePriority] > [obj2 modulePriority]) {
                     return NSOrderedAscending;
@@ -65,25 +58,25 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
                 [self startLoadingModule:define];
             }
             self.launchedAfterNeedsLoadModules = nil;
-            [[[CSMonitorContext sharedInstance] timeProfiler] endAppModuleLoadingLaunchedAfter];
+            [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endApplicationLaunchedAfterModulesLoading];
         }];
     }
     return self;
 }
 
 - (void)registerModule:(id<CSModuleRegisterDefine>)define {
-    if ([[CSTaskScheduler sharedInstance] isApplicationLaunched]) {
-        //引用程序启动完成直接加载
+    if ([[CSTaskScheduler sharedInstance] isAppLaunched]) {
+        //应用程序启动完成直接加载
         [self startLoadingModule:define];
     } else {
-        //引用程序未启动完成需要判断加载模式
+        //应用程序未启动完成需要判断加载模式
         CSModuleLoadingMode mode = [define moduleLoadingMode];
         switch (mode) {
             case CSModuleLoadingModeInstant:
                 //即时加载
-                [[[CSMonitorContext sharedInstance] timeProfiler] beginAppModuleLoadingInstant];
+                [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginApplicationInstantModulesLoading];
                 [self startLoadingModule:define];
-                [[[CSMonitorContext sharedInstance] timeProfiler] endAppModuleLoadingInstant];
+                [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endApplicationInstantModulesLoading];
                 break;
             case CSModuleLoadingModeLaunchedAfter:
                 //延后加载
@@ -104,21 +97,19 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
 
 - (void)unRegisterModule:(Class<CSModule>)modClass {
     NSString *moduleId = [self getModuleId:modClass];
-    if ([moduleId isEqualToString:CSAppGlobalDefaultModuleId]) {
+    if ([moduleId isEqualToString:CSApplicationCoreModuleId]) {
         //应用程序默认模块不能卸载
-        WJLogError(@"❌ module unregister error: module '%@' not found", CSAppGlobalDefaultModuleId);
+        WJLogError(@"❌ module unregister error: module '%@' not found", CSApplicationCoreModuleId);
         return;
     }
     dispatch_semaphore_wait(_module_register_semaphore, DISPATCH_TIME_FOREVER);
     @try {
         CSSimpleModuleContext *context = [self.moduleIdToContext objectForKey:moduleId];
         if (context) {
-            
             [context triggerModuleStatus:CSModuleStatusWillDestroy];
             if ([self.delegate respondsToSelector:@selector(moduleContainer:willDestroyModule:)]) {
                 [self.delegate moduleContainer:self willDestroyModule:context];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSApplicationContextModuleWillDestroyNotification object:self userInfo:@{@"moduleId":moduleId}];
             
             if ([context applicationDelegateListener]) {
                 [self.delegate moduleContainer:self unRegisterAppDelegateListener:[context applicationDelegateListener]];
@@ -129,7 +120,6 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
             if ([self.delegate respondsToSelector:@selector(moduleContainer:didDestroyModule:)]) {
                 [self.delegate moduleContainer:self didDestroyModule:context];
             }
-            [[NSNotificationCenter defaultCenter] postNotificationName:CSApplicationContextModuleDidDestroyNotification object:self userInfo:@{@"moduleId":moduleId}];
         }
     } @catch (NSException *exception) {
         WJLogError(@"❌ module unregister fail, (%@) exception:%@", moduleId, exception);
@@ -144,10 +134,10 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
         WJLogError(@"❌ module register fail , '%@' already exists", moduleId);
         return;
     }
-    [[[CSMonitorContext sharedInstance] timeProfiler] beginAppModuleLoading:moduleId];
+    [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginModuleLoading:moduleId];
     dispatch_semaphore_wait(_module_register_semaphore, DISPATCH_TIME_FOREVER);
     @try {
-        
+        WJLogDebug(@"✅ module loding '%@' start ...", moduleId);
         CSSimpleModuleContext *context = [CSSimpleModuleContext buildContext:define applicationContext:self.applicationContext];
         [context triggerModuleStatus:CSModuleStatusInitialized];
         if ([context applicationDelegateListener]) {
@@ -157,19 +147,18 @@ NSString *const CSApplicationContextModuleDidLoadNotification = @"CSApplicationC
             [self.delegate moduleContainer:self willLoadModule:context];
         }
         [context triggerModuleStatus:CSModuleStatusWillLoading];
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSApplicationContextModuleWillLoadNotification object:self userInfo:@{@"moduleId":moduleId}];
         
         [self.moduleIdToContext setObject:context forKey:[context moduleId]];
         if ([self.delegate respondsToSelector:@selector(moduleContainer:didLoadModule:)]) {
             [self.delegate moduleContainer:self didLoadModule:context];
         }
         [context triggerModuleStatus:CSModuleStatusDidLoading];
-        [[NSNotificationCenter defaultCenter] postNotificationName:CSApplicationContextModuleDidLoadNotification object:self userInfo:@{@"moduleId":moduleId}];
+        WJLogDebug(@"✅ module loding '%@' finished ...", moduleId);
     } @catch (NSException *exception) {
         WJLogError(@"❌ module loading fail, (%@) exception:%@", moduleId, exception);
     } @finally {
         dispatch_semaphore_signal(_module_register_semaphore);
-        [[[CSMonitorContext sharedInstance] timeProfiler] endAppModuleLoading:moduleId];
+        [[[CSMonitorContext sharedInstance] applicationTimeProfiler] endModuleLoading:moduleId];
     }
 }
 

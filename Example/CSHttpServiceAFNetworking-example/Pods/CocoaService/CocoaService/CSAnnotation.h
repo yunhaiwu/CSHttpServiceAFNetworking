@@ -21,14 +21,18 @@
     #define CSAspectSectionName "cs_aspect"
 #endif
 
-#ifndef CSAppFirstViewControllerSectionName
-    #define CSAppFirstViewControllerSectionName "cs_first_vc"
+#ifndef CSApplicationPluginSectionName
+    #define CSApplicationPluginSectionName "cs_app_plugin"
+#endif
+
+#ifndef CSFirstViewControllerSectionName
+    #define CSFirstViewControllerSectionName "cs_first_vc"
 #endif
 
 #define CSMacroInjectionMachOSectionData(sectionName) __attribute((used, section("__DATA,"#sectionName" ")))
 
 
-#define CSAppFirstViewController(name) \
+#define CSFirstViewController(name) \
 class CSAnnotation; char * k##name##vc CSMacroInjectionMachOSectionData(cs_first_vc) = ""#name"";
 
 #define CSModule(name) \
@@ -45,6 +49,8 @@ class CSAnnotation; char * kCSService_##I##ms CSMacroInjectionMachOSectionData(c
 #define CSAspect(name) \
 class CSAnnotation; char * k##name##ma CSMacroInjectionMachOSectionData(cs_aspect) = ""#name"";
 
+#define CSApplicationPlugin(name) \
+class CSAnnotation; char * k##name##ma CSMacroInjectionMachOSectionData(cs_app_plugin) = ""#name"";
 
 /**
  Annotation
@@ -53,7 +59,9 @@ class CSAnnotation; char * k##name##ma CSMacroInjectionMachOSectionData(cs_aspec
 
 + (instancetype)sharedInstance;
 
-- (NSSet<NSString*>*)fetchAnnotationAppFirstViewControllerDefines;
+- (NSSet<NSString*>*)fetchAnnotationApplicationPluginDefines;
+
+- (NSSet<NSString*>*)fetchAnnotationFirstViewControllerDefines;
 
 - (NSSet<NSString*>*)fetchAnnotationModuleDefines;
 

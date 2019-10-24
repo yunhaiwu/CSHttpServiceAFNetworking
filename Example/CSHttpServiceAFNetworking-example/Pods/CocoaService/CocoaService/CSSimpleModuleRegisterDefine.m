@@ -26,7 +26,7 @@
 }
 
 - (BOOL)isEqual:(id)object {
-    if (self.class == [object class]) {
+    if ([object isKindOfClass:[self class]]) {
         if (self.moduleClass == [object moduleClass]) {
             return YES;
         }
@@ -53,7 +53,7 @@
     return [_moduleClass moduleId];
 }
 
-- (int)modulePriority {
+- (NSUInteger)modulePriority {
     return [_moduleClass modulePriority];
 }
 

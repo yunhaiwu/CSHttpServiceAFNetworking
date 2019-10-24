@@ -31,7 +31,7 @@ __attribute__((objc_subclassing_restricted))
 - (void)triggerModuleStatus:(CSModuleStatus)moduleStatus;
 
 /**
- 引用程序委托监听
+ 应用程序委托监听
  */
 - (id<CSModuleAppDelegateListener>)applicationDelegateListener;
 

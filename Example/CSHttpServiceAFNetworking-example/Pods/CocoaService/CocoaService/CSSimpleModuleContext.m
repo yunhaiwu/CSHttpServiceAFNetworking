@@ -43,14 +43,11 @@
     return _appDelegateListener;
 }
 
-/**
- 模块id
- */
 - (NSString*)moduleId {
     return [_modRegisterDefine moduleId];;
 }
 
-- (int)modulePriority {
+- (NSUInteger)modulePriority {
     return [_modRegisterDefine modulePriority];
 }
 

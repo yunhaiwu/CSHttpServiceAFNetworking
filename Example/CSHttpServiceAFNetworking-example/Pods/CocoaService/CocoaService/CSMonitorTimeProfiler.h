@@ -8,42 +8,54 @@
 
 #import <Foundation/Foundation.h>
 
-
 @interface CSMonitorTimeProfiler : NSObject
 
-@property (nonatomic, strong, readonly) dispatch_queue_t recorder_queue;
-
 /*
- 开始统计
+ 开始
  */
-- (void)beginTime:(NSString*)name;
+- (void)beginTime:(NSString* _Nonnull)key;
 
 /*
- 开始一个临时统计（在endTime时会被删除）
+ 累加
  */
-- (void)beginTempTime:(NSString*)name;
+- (void)cumulativeTime:(NSString* _Nonnull)key;
 
 /*
- 累加时间
+ 结束
  */
-- (void)cumulativeTime:(NSString*)name;
+- (void)endTime:(NSString* _Nonnull)key;
 
 /*
- 结束计算统计（统计结束）
+ 获取时长log（秒）
+ key:统计key
+ isRemove：获取完成后是否移除，建议移除
+ callback：回调block
  */
-- (void)endTime:(NSString*)name;
+- (void)getTimeDurationLogForSeconds:(NSString* _Nonnull )key isRemove:(BOOL)isRemove callback:(void(^_Nonnull)(double duration, NSString * _Nullable log))callbackBlock;
 
 /*
- 获取以秒计数的时长
- */
-- (void)getTimeDurationForSeconds:(NSString*)name isDone:(BOOL)isDone resultBlock:(void(^)(double duration, NSString *log))callbackBlock;
-
-/*
-获取以毫秒计数的时长
+ 获取时长log（毫秒）
+ key:统计key
+ isRemove：获取完成后是否移除，建议移除
+ callback：回调block
 */
-- (void)getTimeDurationForMilliseconds:(NSString*)name isDone:(BOOL)isDone resultBlock:(void(^)(double duration, NSString *log))callbackBlock;
+- (void)getTimeDurationLogForMilliseconds:(NSString* _Nonnull )key isRemove:(BOOL)isRemove callback:(void(^_Nonnull)(double duration, NSString * _Nullable log))callbackBlock;
 
+/*
+ 根据keys获取时长（秒）
+ keys:统计keys
+ isRemove：获取完成后是否移除，建议移除
+ callback：回调block
+ */
+- (void)getTimeDurationsForSeconds:(NSArray<NSString*>* _Nonnull)keys isRemove:(BOOL)isRemove callback:(void(^_Nonnull)(NSDictionary<NSString*, NSNumber*> * _Nullable keysToDurations))callbackBlock;
 
-- (void)getTimeProfiles:(NSArray<NSString*>*)names callbackBlock:(void(^)(NSDictionary *timeProfiles))callbackBlock;
+/*
+根据keys获取时长（毫秒）
+keys:统计keys
+isRemove：获取完成后是否移除，建议移除
+callback：回调block
+*/
+- (void)getTimeDurationsForMilliseconds:(NSArray<NSString*>* _Nonnull)keys isRemove:(BOOL)isRemove callback:(void(^_Nonnull)(NSDictionary<NSString*, NSNumber*> * _Nullable keysToDurations))callbackBlock;
+
 
 @end

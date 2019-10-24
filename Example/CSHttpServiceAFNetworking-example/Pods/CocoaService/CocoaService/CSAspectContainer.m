@@ -10,6 +10,7 @@
 #import <WJLoggingAPI/WJLoggingAPI.h>
 #import "CSSafeDictionary.h"
 #import "CSSafeSet.h"
+#import "CSApplicationPreloadDataManager.h"
 
 @interface CSAspectContainer ()
 
@@ -28,6 +29,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
+        WJLogDebug(@"✅ aspect container initialize ......");
         self.aspectIdToAspect = [[CSSafeDictionary alloc] init];
         self.pointcutClassNameToAspectSet = [[CSSafeDictionary alloc] init];
         self.moduleIdToAspectIdSet = [[CSSafeDictionary alloc] init];
@@ -142,6 +144,23 @@
         WJLogDebug(@"✅ unregister aspect '%@' successful", aspectId);
     }
     _isExistAspects = [self.aspectIdToAspect count];
+}
+
+
+#pragma mark CSApplicationPlugin
++ (id<CSApplicationPlugin>)sharedPlugin {
+    return [CSAspectContainer new];
+}
+
+- (void)applicationContext:(id<CSApplicationContext>)applicationContext moduleWillLoad:(id<CSModuleContext>)moduleContext {
+    NSSet<id<CSAspectRegisterDefine>>* aspectDefines = [[CSApplicationPreloadDataManager sharedInstance] getAspectRegisterDefineSet:[moduleContext moduleId]];
+    if ([aspectDefines count]) {
+        [self batchRegisterAspects:aspectDefines];
+    }
+}
+
+- (void)applicationContext:(id<CSApplicationContext>)applicationContext moduleDidDestroy:(id<CSModuleContext>)moduleContext {
+    [self removeAspectsByModuleId:[moduleContext moduleId]];
 }
 
 @end

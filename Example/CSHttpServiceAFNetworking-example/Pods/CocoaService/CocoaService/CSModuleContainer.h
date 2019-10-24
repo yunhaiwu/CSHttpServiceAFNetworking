@@ -53,7 +53,7 @@ __attribute__((objc_subclassing_restricted))
 
 /**
  注册模块
- @param moduleRegisterDefine 模块定义
+ @param define 模块定义
  */
 - (void)registerModule:(id<CSModuleRegisterDefine>)define;
 

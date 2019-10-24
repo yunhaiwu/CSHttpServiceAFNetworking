@@ -14,15 +14,17 @@
 #import "CSApplicationPreloadDataManager.h"
 #import "CSSimpleModuleRegisterDefine.h"
 #import "CSSimpleServiceRegisterDefine.h"
-#import "CSAppGlobalDefaultModule.h"
+#import "CSApplicationCoreModule.h"
 #import "CSTaskScheduler.h"
-#import "CSAppGlobalDefaultModule.h"
+#import "CSApplicationCoreModule.h"
 #import "CSSafeArray.h"
 #import "CSModuleAppDelegateListener.h"
 #import "CSMonitorContext.h"
 #import "CSModuleContext.h"
 #import "CSAspectContainer.h"
 #import "CSSimpleAspectRegisterDefine.h"
+#import "CSApplicationPlugin.h"
+#import "CSApplicationPluginManager.h"
 
 @interface CSSimpleApplicationContext ()<CSModuleContainerDelegate>
 
@@ -34,22 +36,30 @@
 
 @property (nonatomic, strong) CSSafeArray<id<CSModuleAppDelegateListener>> *appDelegateListeners;
 
+@property (nonatomic, strong) CSApplicationPluginManager *pluginManager;
+
 @end
 
 @implementation CSSimpleApplicationContext
 
-- (void)loadApplicationGlobalModule {
-    [self.moduleContainer registerModule:[[CSApplicationPreloadDataManager sharedInstance] generateModuleRegisterDefine:[CSAppGlobalDefaultModule class]]];
+- (void)loadApplicationCoreModule {
+    WJLogDebug(@"✅ loading application core module ...");
+    [self.moduleContainer registerModule:[[CSApplicationPreloadDataManager sharedInstance] generateModuleRegisterDefine:[CSApplicationCoreModule class]]];
 }
 
 - (instancetype)init {
     self = [super init];
     if (self) {
-        [[[CSMonitorContext sharedInstance] timeProfiler] beginAppLaunched];
+        WJLogDebug(@"✅ CocoaService start ......");
+        [[[CSMonitorContext sharedInstance] applicationTimeProfiler] beginApplicationLaunched];
         self.appDelegateListeners = [[CSSafeArray alloc] init];
-        self.serviceContainer = [[CSServicesContainer alloc] init];
-        self.aspectContainer = [[CSAspectContainer alloc] init];
         self.moduleContainer = [[CSModuleContainer alloc] initWithApplicationContext:self delegate:self];
+        self.serviceContainer = [CSServicesContainer sharedPlugin];
+        self.aspectContainer = [CSAspectContainer sharedPlugin];
+        self.pluginManager = [[CSApplicationPluginManager alloc] init];
+        [_pluginManager registerPlugins:_serviceContainer];
+        [_pluginManager registerPlugins:_aspectContainer];
+        [_pluginManager applicationStarting:self];
         [self performModulesRegister];
     }
     return self;
@@ -59,7 +69,7 @@
  触发模块加载
  */
 -(void)performModulesRegister {
-    [self loadApplicationGlobalModule];
+    [self loadApplicationCoreModule];
     NSSet<id<CSModuleRegisterDefine>> *modDefineSet = [[CSApplicationPreloadDataManager sharedInstance] getModuleRegisterDefineSet];
     for (id<CSModuleRegisterDefine> modDefine in modDefineSet) {
         [self.moduleContainer registerModule:modDefine];
@@ -69,8 +79,7 @@
 #pragma mark forwarding lifecycle method
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
     NSArray<id<CSModuleAppDelegateListener>> *listeners = [self.appDelegateListeners origDataCopy];
-    for (NSInteger i = 0; i < [listeners count]; i++) {
-        id<CSModuleAppDelegateListener> listener = listeners[i];
+    for (id<CSModuleAppDelegateListener> listener in listeners) {
         if ([listener respondsToSelector:anInvocation.selector]) {
             [anInvocation invokeWithTarget:listener];
         }
@@ -87,23 +96,11 @@
 }
 
 - (void)moduleContainer:(CSModuleContainer *)modContainer willLoadModule:(id<CSModuleContext>)moduleContext {
-    NSString *moduleId = [moduleContext moduleId];
-    NSSet<id<CSServiceRegisterDefine>>* serviceDefines = [[CSApplicationPreloadDataManager sharedInstance] getServiceRegisterDefineSet:moduleId];
-    if ([serviceDefines count]) {
-        [self.serviceContainer batchRegisterServices:serviceDefines];
-    }
-    
-    NSSet<id<CSAspectRegisterDefine>>* aspectDefines = [[CSApplicationPreloadDataManager sharedInstance] getAspectRegisterDefineSet:moduleId];
-    if ([aspectDefines count]) {
-        [self.aspectContainer batchRegisterAspects:aspectDefines];
-    }
-    
+    [self.pluginManager applicationContext:self moduleWillLoad:moduleContext];
 }
 
 - (void)moduleContainer:(CSModuleContainer *)modContainer didDestroyModule:(id<CSModuleContext>)moduleContext {
-    NSString *moduleId = [moduleContext moduleId];
-    [self.aspectContainer removeAspectsByModuleId:moduleId];
-    [self.serviceContainer remvoeServicesByModuleId:moduleId];
+    [self.pluginManager applicationContext:self moduleDidDestroy:moduleContext];
 }
 
 #pragma mark CSApplicationContext

@@ -50,7 +50,7 @@ typedef NS_ENUM(NSInteger, CSModuleStatus) {
 /**
  优先级
  */
-- (int)modulePriority;
+- (NSUInteger)modulePriority;
 
 /**
  模块加载模式

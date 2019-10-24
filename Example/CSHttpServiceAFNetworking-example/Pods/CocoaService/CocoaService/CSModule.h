@@ -35,7 +35,7 @@ typedef NS_ENUM(NSInteger, CSModuleLoadingMode) {
 //模块接口
 @protocol CSModule <UIApplicationDelegate>
 
-@property (nonatomic, weak) id<CSModuleContext> modContext;
+@property (nonatomic, weak) id<CSModuleContext> _Nullable modContext;
 
 @optional
 
@@ -43,49 +43,49 @@ typedef NS_ENUM(NSInteger, CSModuleLoadingMode) {
  模块id，
  default：ClassName
  */
-+ (NSString*)moduleId;
++ (NSString* _Nonnull)moduleId;
 
 /**
  加载优先级
  0~100，值越大越优先加载，默认值：50
  */
-+ (int)modulePriority;
++ (NSUInteger)modulePriority;
 
 /**
  模块加载模式
- default：CSModuleLoadingModeInstant（即时加载）
+ default：CSModuleLoadingModeLaunchedAfter（即时加载）
  */
 + (CSModuleLoadingMode)moduleLoadingMode;
 
 /**
- 引用程序回调监听器
+ 应用程序回调监听器
  */
-+ (Class<CSModuleAppDelegateListener>)applicationDelegateListenerClass;
++ (Class<CSModuleAppDelegateListener> _Nullable)applicationDelegateListenerClass;
 
 /**
  模块初始化
  */
-- (void)onModuleInit:(id<CSApplicationContext>)applicationContext;
+- (void)onModuleInit:(id<CSApplicationContext> _Nonnull)applicationContext;
 
 /**
  准备加载
  */
-- (void)onModuleWillLoad:(id<CSApplicationContext>)applicationContext;
+- (void)onModuleWillLoad:(id<CSApplicationContext> _Nonnull)applicationContext;
 
 /**
  已加载
  */
-- (void)onModuleDidLoad:(id<CSApplicationContext>)applicationContext;
+- (void)onModuleDidLoad:(id<CSApplicationContext> _Nonnull)applicationContext;
 
 /**
  准备卸载
  */
-- (void)onModuleWillDestroy:(id<CSApplicationContext>)applicationContext;
+- (void)onModuleWillDestroy:(id<CSApplicationContext> _Nonnull)applicationContext;
 
 /**
  已卸载
  */
-- (void)onModuleDidDestroy:(id<CSApplicationContext>)applicationContext;
+- (void)onModuleDidDestroy:(id<CSApplicationContext> _Nonnull)applicationContext;
 
 
 @end

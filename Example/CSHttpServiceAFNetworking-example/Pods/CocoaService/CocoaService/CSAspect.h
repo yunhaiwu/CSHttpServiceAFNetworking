@@ -46,36 +46,36 @@ typedef NS_OPTIONS(NSUInteger, CSAopAspectActionOption) {
  多表达式格式:
         User(login:);User(logout:)  表示拦截User类 login:、logout: 方法
  */
-+ (NSString*)pointcutExpressions;
++ (NSString* _Nonnull)pointcutExpressions;
 
 @optional
 
 /**
  调用之前方法
  */
-- (void)doBefore:(id<CSAspectJoinPoint>)joinPoint;
+- (void)doBefore:(id<CSAspectJoinPoint> _Nonnull)joinPoint;
 
 /**
  调用之后方法
  */
-- (void)doAfter:(id<CSAspectJoinPoint>)joinPoint;
+- (void)doAfter:(id<CSAspectJoinPoint> _Nonnull)joinPoint;
 
 /**
  环绕方法
  实现此方法需要在方法中调用 proceed: 或 proceed 继续执行
  */
-- (void)doAround:(id<CSAspectProceedingJoinPoint>)joinPoint;
+- (void)doAround:(id<CSAspectProceedingJoinPoint> _Nonnull)joinPoint;
 
 /**
  切面id
  default：Aspect Class Name
  */
-+ (NSString*)aspectId;
++ (NSString* _Nonnull)aspectId;
 
 /**
  所属模块id
  如果不实现则属于全局通用模块
  */
-+ (NSString*)belongModuleId;
++ (NSString* _Nonnull)belongModuleId;
 
 @end

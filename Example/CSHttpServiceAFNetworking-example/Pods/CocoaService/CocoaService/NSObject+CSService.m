@@ -20,7 +20,7 @@
 }
 
 + (NSString*)belongModuleId {
-    return CSAppGlobalDefaultModuleId;
+    return CSApplicationCoreModuleId;
 }
 
 @end

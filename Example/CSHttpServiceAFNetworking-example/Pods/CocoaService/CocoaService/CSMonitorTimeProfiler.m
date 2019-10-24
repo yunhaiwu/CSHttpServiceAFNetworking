@@ -8,52 +8,35 @@
 
 #import "CSMonitorTimeProfiler.h"
 
+
 @interface CSTimeProfileItem : NSObject
 
-/*
- 名称
- */
-@property (nonatomic, copy) NSString *name;
+@property (nonatomic, copy) NSString *key;
 
-/*
- 开始时间
- */
 @property (nonatomic, assign) double beginTime;
 
-/*
- 时长
- */
 @property (nonatomic, assign) double duration;
 
-/*
- 是否为临时统计项
- */
-@property (nonatomic, assign) BOOL isTemp;
-
-/*
- 此项统计已结束
- */
 @property (nonatomic, assign) BOOL isDone;
-
 
 @end
 
 @implementation CSTimeProfileItem
 
-- (void)beginTimeAction:(double)time {
+- (void)begin:(double)time {
     if (!_isDone) {
         _beginTime = time;
     }
 }
 
-- (void)cumulativeTimeAction:(double)time {
+- (void)cumulative:(double)time {
     if (!_isDone) {
         _duration += time - _beginTime;
         _beginTime = time;
     }
 }
 
-- (void)endTimeAction:(double)time {
+- (void)end:(double)time {
     if (!_isDone) {
         _isDone = YES;
         if (_beginTime > 0.0f) {
@@ -65,11 +48,10 @@
     }
 }
 
-- (instancetype)initWithName:(NSString*)name isTemp:(BOOL)isTemp {
+- (instancetype)initWithKey:(NSString*)key {
     self = [super init];
     if (self) {
-        self.isTemp = isTemp;
-        self.name = name;
+        self.key = key;
     }
     return self;
 }
@@ -77,9 +59,9 @@
 @end
 
 
-
-
 @interface CSMonitorTimeProfiler ()
+
+@property (nonatomic, strong, readonly) dispatch_queue_t time_prifiler_queue;
 
 @property (nonatomic, strong) NSMutableDictionary<NSString*, CSTimeProfileItem*> *timeProfileItems;
 
@@ -91,106 +73,89 @@
     self = [super init];
     if (self) {
         _timeProfileItems = [[NSMutableDictionary alloc] init];
-        _recorder_queue = dispatch_queue_create("com.cocoaservice.monitor.time.profiler.queue", DISPATCH_QUEUE_SERIAL);
+        _time_prifiler_queue = dispatch_queue_create("com.cocoaservice.monitor.time.profiler.queue", DISPATCH_QUEUE_SERIAL);
     }
     return self;
 }
 
-- (CSTimeProfileItem*)getTimeItem:(NSString*)name isTemp:(BOOL)isTemp {
-    CSTimeProfileItem *item = self.timeProfileItems[name];
+- (CSTimeProfileItem*)getTimeItem:(NSString*)key {
+    CSTimeProfileItem *item = self.timeProfileItems[key];
     if (!item) {
-        item = [[CSTimeProfileItem alloc] initWithName:name isTemp:isTemp];
-        self.timeProfileItems[name] = item;
+        item = [[CSTimeProfileItem alloc] initWithKey:key];
+        self.timeProfileItems[key] = item;
     }
     return item;
 }
 
-- (CSTimeProfileItem*)getTimeItem:(NSString*)name {
-    CSTimeProfileItem *item = self.timeProfileItems[name];
-    if (!item) {
-        item = [[CSTimeProfileItem alloc] initWithName:name isTemp:NO];
-        self.timeProfileItems[name] = item;
-    }
-    return item;
-}
-
-
-- (void)beginTime:(NSString*)name {
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name];
-        [time beginTimeAction:currentTime];
-    });
-}
-
-- (void)beginTempTime:(NSString*)name {
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name isTemp:YES];
-        [time beginTimeAction:currentTime];
-    });
-}
-
-- (void)cumulativeTime:(NSString*)name {
+- (void)beginTime:(NSString* _Nonnull)key {
     CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name];
-        [time cumulativeTimeAction:current];
+    dispatch_async(_time_prifiler_queue, ^{
+        CSTimeProfileItem *time = [self getTimeItem:key];
+        [time begin:current];
     });
 }
 
-- (void)endTime:(NSString*)name {
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name];
-        [time endTimeAction:currentTime];
+- (void)cumulativeTime:(NSString* _Nonnull)key {
+    CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
+    dispatch_async(_time_prifiler_queue, ^{
+        CSTimeProfileItem *time = [self getTimeItem:key];
+        [time cumulative:current];
     });
 }
 
-- (void)getTimeDurationForSeconds:(NSString*)name isDone:(BOOL)isDone resultBlock:(void(^)(double duration, NSString *log))callbackBlock {
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name];
-        if (![time isDone] && isDone) {
-            if (isDone) {
-                [time endTimeAction:currentTime];
-            }
-        }
-        if ([time isTemp] && [time isDone]) {
-            [self.timeProfileItems removeObjectForKey:[time name]];
-        }
+- (void)endTime:(NSString* _Nonnull)key {
+    CFAbsoluteTime current = CFAbsoluteTimeGetCurrent();
+    dispatch_async(_time_prifiler_queue, ^{
+        CSTimeProfileItem *time = [self getTimeItem:key];
+        [time end:current];
+    });
+}
+
+- (void)getTimeDurationLogForSeconds:(NSString *)key isRemove:(BOOL)isRemove callback:(void (^)(double, NSString * _Nonnull))callbackBlock {
+    dispatch_async(_time_prifiler_queue, ^{
+        CSTimeProfileItem *time = [self getTimeItem:key];
+        if (isRemove) [self.timeProfileItems removeObjectForKey:key];
         if (callbackBlock) {
-            callbackBlock([time duration], [NSString stringWithFormat:@"⏰ %@ : %@ seconds...", [time name], @([time duration])]);
+            callbackBlock([time duration], [NSString stringWithFormat:@"⏰ %@ : %@ seconds...", [time key], @([time duration])]);
         }
     });
 }
 
-- (void)getTimeDurationForMilliseconds:(NSString*)name isDone:(BOOL)isDone resultBlock:(void(^)(double duration, NSString *log))callbackBlock {
-    CFAbsoluteTime currentTime = CFAbsoluteTimeGetCurrent();
-    dispatch_async(_recorder_queue, ^{
-        CSTimeProfileItem *time = [self getTimeItem:name];
-        if (![time isDone] && isDone) {
-            if (isDone) {
-                [time endTimeAction:currentTime];
-            }
-        }
-        if ([time isTemp] && [time isDone]) {
-            [self.timeProfileItems removeObjectForKey:[time name]];
-        }
+- (void)getTimeDurationLogForMilliseconds:(NSString *)key isRemove:(BOOL)isRemove callback:(void (^)(double, NSString * _Nonnull))callbackBlock {
+    dispatch_async(_time_prifiler_queue, ^{
+        CSTimeProfileItem *time = [self getTimeItem:key];
+        if (isRemove) [self.timeProfileItems removeObjectForKey:key];
         if (callbackBlock) {
-            callbackBlock([time duration] * 1000.0f, [NSString stringWithFormat:@"⏰ %@ : %@ milliseconds... \n", [time name], @([time duration] * 1000.0f)]);
+            callbackBlock([time duration], [NSString stringWithFormat:@"⏰ %@ : %@ milliseconds...", [time key], @([time duration] * 1000.0f)]);
         }
     });
 }
 
-- (void)getTimeProfiles:(NSArray<NSString*>*)names callbackBlock:(void(^)(NSDictionary *timeProfiles))callbackBlock {
-    dispatch_async(_recorder_queue, ^{
-        NSMutableDictionary *timeProfiles = [[NSMutableDictionary alloc] init];
-        for (NSString *name in names) {
-            CSTimeProfileItem *item = [self getTimeItem:name];
-            [timeProfiles setObject:[NSString stringWithFormat:@"%@ milliseconds ...", @([item duration]*1000.0f)] forKey:name];
+- (void)getTimeDurationsForSeconds:(NSArray<NSString *> *)keys isRemove:(BOOL)isRemove callback:(void (^)(NSDictionary<NSString *,NSNumber *> * _Nullable))callbackBlock {
+    dispatch_async(_time_prifiler_queue, ^{
+        NSMutableDictionary *keysToDurations = [[NSMutableDictionary alloc] initWithCapacity:keys.count];
+        for (NSString *key in keys) {
+            CSTimeProfileItem *timeProfileItem = self.timeProfileItems[key];
+            if (timeProfileItem) {
+                [keysToDurations setObject:@([timeProfileItem duration]) forKey:key];
+            }
+            if (isRemove) [self.timeProfileItems removeObjectForKey:key];
         }
-        callbackBlock(timeProfiles);
+        callbackBlock([keysToDurations copy]);
+    });
+}
+
+- (void)getTimeDurationsForMilliseconds:(NSArray<NSString *> *)keys isRemove:(BOOL)isRemove callback:(void (^)(NSDictionary<NSString *,NSNumber *> * _Nullable))callbackBlock {
+    dispatch_async(_time_prifiler_queue, ^{
+        NSMutableDictionary *keysToDurations = [[NSMutableDictionary alloc] initWithCapacity:keys.count];
+        for (NSString *key in keys) {
+            CSTimeProfileItem *timeProfileItem = self.timeProfileItems[key];
+            if (timeProfileItem) {
+                [keysToDurations setObject:@([timeProfileItem duration] * 1000.0f) forKey:key];
+            }
+            if (isRemove) [self.timeProfileItems removeObjectForKey:key];
+        }
+        callbackBlock([keysToDurations copy]);
     });
 }
 

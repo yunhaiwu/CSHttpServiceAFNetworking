@@ -19,24 +19,39 @@ typedef void (^CSHttpServiceDownloadResponseBlock)(NSString* filePath, NSError *
 
 typedef void (^CSHttpServiceProgressBlock)(float progress);
 
+
+@protocol CSHttpTask <NSObject>
+
+- (BOOL)isLoading;
+
+- (void)cancel;
+
+- (BOOL)isDownload;
+
+- (NSURL* _Nonnull)requestURL;
+
+@end
+
+
+
 /*
  HTTP 服务接口
  */
 @protocol CSHttpService <CSService>
 
-- (void)request:(id<CSHttpRequest> _Nonnull)request
+- (id<CSHttpTask>)request:(id<CSHttpRequest> _Nonnull)request
   responseClass:(Class _Nonnull)resClass
   responseBlock:(CSHttpServiceResponseBlock _Nonnull)responseBlock;
 
 
-- (void)requestWithURL:(NSURL* _Nonnull)url
+- (id<CSHttpTask>)requestWithURL:(NSURL* _Nonnull)url
                 method:(CSHTTPMethod)method
                 params:(NSDictionary<NSString*, NSObject*>* _Nullable)params
                headers:(NSDictionary<NSString*, NSString*>* _Nullable)headers
          responseBlock:(CSHttpServiceResponseDataBlock _Nonnull) responseBlock;
 
 
-- (void)downloadWithURL:(NSURL* _Nonnull)url
+- (id<CSHttpTask>)downloadWithURL:(NSURL* _Nonnull)url
           responseBlock:(CSHttpServiceDownloadResponseBlock _Nonnull)downloadResponseBlock
                progress:(CSHttpServiceProgressBlock _Nullable)progressBlock;
 

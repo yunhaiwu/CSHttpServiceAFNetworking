@@ -22,8 +22,7 @@ pod CSHttpServiceAPI
 
 ```
     id<CSHttpService> httpService = [[[CocoaService sharedInstance] applicationContext] fetchService:@protocol(CSHttpService)];
-    
-    [httpService request:request responseClass:[SimpleResponseObject class] responseBlock:^(id<CSHttpResponse> response, NSError *error) {
+    id<CSHttpTask> task = [httpService request:request responseClass:[SimpleResponseObject class] responseBlock:^(id<CSHttpResponse> response, NSError *error) {
         if (error) {
             //处理网络环境错误
         } else {
@@ -34,5 +33,4 @@ pod CSHttpServiceAPI
             }
         }
     }];
-
 ```

@@ -24,7 +24,7 @@
     return NSStringFromClass([self class]);
 }
 
-+ (int)modulePriority {
++ (NSUInteger)modulePriority {
     return WJ_MODULE_LOADING_PRIORITY_DEFAULT;
 }
 
