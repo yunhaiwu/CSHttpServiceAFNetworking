@@ -10,7 +10,6 @@
 #import <CocoaService/CocoaService.h>
 #import <CSHttpServiceAPI/CSHttpServiceAPI.h>
 
-
 @CSService(CSHttpService, AFNetworkingHttpService)
 @interface AFNetworkingHttpService : NSObject<CSHttpService>
 

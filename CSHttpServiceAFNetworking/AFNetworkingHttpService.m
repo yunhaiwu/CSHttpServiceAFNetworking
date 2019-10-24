@@ -13,6 +13,59 @@
 #import "SimpleAFHttpServiceResponse.h"
 #import <WJLoggingAPI/WJLoggingAPI.h>
 
+
+@interface SimpleAFHttpTaskModel : NSObject<CSHttpTask>
+
+@property (nonatomic, weak) NSURLSessionTask *sessionTask;
+
+@property (nonatomic, assign) BOOL isDownload;
+
+- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask isDownload:(BOOL)isDownload;
+
+@end
+
+@implementation SimpleAFHttpTaskModel
+
+- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask isDownload:(BOOL)isDownload {
+    self = [super init];
+    if (self) {
+        _sessionTask = sessionTask;
+        _isDownload = isDownload;
+    }
+    return self;
+}
+
+#pragma mark CSHttpTask
+- (BOOL)isLoading {
+    if (_sessionTask) {
+        NSURLSessionTaskState state = [_sessionTask state];
+        if (state == NSURLSessionTaskStateRunning || state == NSURLSessionTaskStateSuspended) {
+            return YES;
+        }
+    }
+    return NO;
+}
+
+- (void)cancel {
+    if (_sessionTask && [self isLoading]) {
+        [_sessionTask cancel];
+    }
+}
+
+- (BOOL)isDownload {
+    return _isDownload;
+}
+
+- (NSURL* _Nonnull)requestURL {
+    if (_sessionTask) {
+        return [[[_sessionTask currentRequest] URL] copy];
+    }
+    return nil;
+}
+
+@end
+
+
 @interface AFNetworkingHttpService ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
@@ -92,25 +145,26 @@
 }
 
 #pragma mark CSHttpService
-- (void)request:(id<CSHttpRequest> _Nonnull)request
+- (id<CSHttpTask>)request:(id<CSHttpRequest> _Nonnull)request
   responseClass:(Class)responseClass
   responseBlock:(CSHttpServiceResponseBlock)responseBlock {
+    id<CSHttpTask> httpTask = nil;
     if ([request respondsToSelector:@selector(validateParamsByError:)]) {
         NSError *error = nil;
         [request validateParamsByError:&error];
         if (error) {
             responseBlock(nil, error);
-            return;
+            return httpTask;
         }
     }
     if (![responseClass conformsToProtocol:@protocol(CSHttpResponse)]) {
         responseBlock(nil, [NSError errorWithDomain:@"AFNetworkingHttpService" code:1000 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ need implementation protocol 'CSHttpResponse' ", NSStringFromClass(responseClass)]}]);
-        return;
+        return httpTask;
     }
     NSError *interceptorError = nil;
     if (![self execInterceptorPreRequestHandle:request error:&interceptorError]) {
         responseBlock(nil, interceptorError);
-        return;
+        return httpTask;
     }
     
     int timeoutBySeconds = CSHttpServiceDefaultTimeoutBySeconds;
@@ -139,11 +193,11 @@
     if ([request respondsToSelector:@selector(params)]) {
         requestParams = [[request params] copy];
     }
-    
+    NSURLSessionDataTask *sessionDataTask = nil;
     switch (reqMethod) {
         case CSHTTPMethodGET:
         {
-            [self.sessionManager GET:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            sessionDataTask = [self.sessionManager GET:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
@@ -155,13 +209,13 @@
             break;
         case CSHTTPMethodPOST:
         {
-            NSArray<CSHttpFileUpload*> *uploadFiles = nil;
+            NSArray<CSHttpFileUploadModel*> *uploadFiles = nil;
             if ([request respondsToSelector:@selector(uploadFiles)]) {
                 uploadFiles = [request uploadFiles];
             }
             if ([uploadFiles count]) {
-                [self.sessionManager POST:requestURL parameters:requestParams constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
-                    for (CSHttpFileUpload *uploadFile in uploadFiles) {
+                sessionDataTask = [self.sessionManager POST:requestURL parameters:requestParams constructingBodyWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+                    for (CSHttpFileUploadModel *uploadFile in uploadFiles) {
                         if ([uploadFile fileExist]) {
                             [formData appendPartWithFileData:[NSData dataWithContentsOfFile:uploadFile.filePath] name:uploadFile.requestKey fileName:uploadFile.fileName mimeType:uploadFile.mimeType];
                         }
@@ -175,7 +229,7 @@
                     responseBlock(nil, error);
                 }];
             } else {
-                [self.sessionManager POST:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                sessionDataTask = [self.sessionManager POST:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                     id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
                     [response setResponseData:responseObject];
                     [self execInterceptorAfterResponseHandle:response];
@@ -188,7 +242,7 @@
             break;
         case CSHTTPMethodPUT:
         {
-            [self.sessionManager PUT:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            sessionDataTask = [self.sessionManager PUT:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
@@ -200,7 +254,7 @@
             break;
         case CSHTTPMethodDELETE:
         {
-            [self.sessionManager DELETE:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            sessionDataTask = [self.sessionManager DELETE:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
@@ -212,7 +266,7 @@
             break;
         case CSHTTPMethodPATCH:
         {
-            [self.sessionManager PATCH:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+            sessionDataTask = [self.sessionManager PATCH:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
                 id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
@@ -224,10 +278,12 @@
         default:
             break;
     }
+    if (sessionDataTask) httpTask = [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionDataTask isDownload:NO];
+    return httpTask;
 }
 
 
-- (void)requestWithURL:(NSURL*)url
+- (id<CSHttpTask>)requestWithURL:(NSURL*)url
                 method:(CSHTTPMethod)method
                 params:(NSDictionary<NSString*, NSObject*>*)params
                headers:(NSDictionary<NSString*, NSString*>*)headers
@@ -237,7 +293,7 @@
     [request setReqHttpMethod:method];
     [request setReqParams:params];
     [request setReqHeaders:headers];
-    [self request:request responseClass:[SimpleAFHttpServiceResponse class] responseBlock:^(id<CSHttpResponse> response, NSError *error) {
+    return [self request:request responseClass:[SimpleAFHttpServiceResponse class] responseBlock:^(id<CSHttpResponse> response, NSError *error) {
         if (responseBlock) {
             if (error) {
                 responseBlock(nil, error);
@@ -249,7 +305,7 @@
 }
 
 
-- (void)downloadWithURL:(NSURL*)url
+- (id<CSHttpTask>)downloadWithURL:(NSURL*)url
           responseBlock:(CSHttpServiceDownloadResponseBlock)downloadResponseBlock
                progress:(CSHttpServiceProgressBlock)progressBlock {
     NSURLRequest *request = [NSURLRequest requestWithURL:url];
@@ -269,6 +325,7 @@
         }
     }];
     [sessionTask resume];
+    return [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionTask isDownload:YES];
 }
 
 @end
