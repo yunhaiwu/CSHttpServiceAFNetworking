@@ -1,5 +1,5 @@
 //
-//  CSHttpFileUploadModelModel.h
+//  CSHttpFileUploadModel.h
 //  CocoaService-HttpServiceAPI
 //
 //  Created by 吴云海

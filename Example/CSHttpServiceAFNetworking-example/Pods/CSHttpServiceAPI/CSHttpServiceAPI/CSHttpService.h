@@ -10,6 +10,7 @@
 #import <CocoaService/CSService.h>
 #import "CSHttpRequest.h"
 #import "CSHttpResponse.h"
+#import "CSHttpTask.h"
 
 typedef void(^CSHttpServiceResponseBlock)(id<CSHttpResponse> response, NSError *error);
 
@@ -18,19 +19,6 @@ typedef void(^CSHttpServiceResponseDataBlock)(NSData *responseData, NSError *err
 typedef void (^CSHttpServiceDownloadResponseBlock)(NSString* filePath, NSError *error);
 
 typedef void (^CSHttpServiceProgressBlock)(float progress);
-
-
-@protocol CSHttpTask <NSObject>
-
-- (BOOL)isLoading;
-
-- (void)cancel;
-
-- (BOOL)isDownload;
-
-- (NSURL* _Nonnull)requestURL;
-
-@end
 
 
 

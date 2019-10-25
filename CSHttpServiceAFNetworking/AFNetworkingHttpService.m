@@ -18,19 +18,16 @@
 
 @property (nonatomic, weak) NSURLSessionTask *sessionTask;
 
-@property (nonatomic, assign) BOOL isDownload;
-
-- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask isDownload:(BOOL)isDownload;
+- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask;
 
 @end
 
 @implementation SimpleAFHttpTaskModel
 
-- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask isDownload:(BOOL)isDownload {
+- (instancetype)initWithSessionTask:(NSURLSessionTask*)sessionTask {
     self = [super init];
     if (self) {
         _sessionTask = sessionTask;
-        _isDownload = isDownload;
     }
     return self;
 }
@@ -52,11 +49,7 @@
     }
 }
 
-- (BOOL)isDownload {
-    return _isDownload;
-}
-
-- (NSURL* _Nonnull)requestURL {
+- (NSURL* _Nullable)requestURL {
     if (_sessionTask) {
         return [[[_sessionTask currentRequest] URL] copy];
     }
@@ -278,7 +271,7 @@
         default:
             break;
     }
-    if (sessionDataTask) httpTask = [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionDataTask isDownload:NO];
+    if (sessionDataTask) httpTask = [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionDataTask];
     return httpTask;
 }
 
@@ -325,7 +318,7 @@
         }
     }];
     [sessionTask resume];
-    return [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionTask isDownload:YES];
+    return [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionTask];
 }
 
 @end
