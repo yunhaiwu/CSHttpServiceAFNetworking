@@ -10,6 +10,7 @@
 #import "CSHttpFileUploadModel.h"
 
 typedef NS_ENUM(NSInteger, CSHTTPMethod) {
+    
     CSHTTPMethodGET = 0,
     
     CSHTTPMethodPOST = 1,
@@ -26,7 +27,7 @@ typedef NS_ENUM(NSInteger, CSHTTPMethod) {
 /**
  请求url
  */
-- (NSURL*)url;
+- (NSURL* _Nonnull)url;
 
 @optional
 /**
@@ -38,12 +39,12 @@ typedef NS_ENUM(NSInteger, CSHTTPMethod) {
 /**
  请求头
  */
-- (NSDictionary*)headers;
+- (NSDictionary*_Nullable)headers;
 
 /**
  请求参数
  */
-- (NSDictionary*)params;
+- (NSDictionary*_Nullable)params;
 
 /**
  超时时长(秒)
@@ -54,12 +55,12 @@ typedef NS_ENUM(NSInteger, CSHTTPMethod) {
 /**
  上传文件
  */
-- (NSArray<CSHttpFileUploadModel*>*)uploadFiles;
+- (NSArray<CSHttpFileUploadModel*>*_Nullable)uploadFiles;
 
 /**
  验证参数
  */
-- (void)validateParamsByError:(NSError**)error;
+- (void)validateParamsByError:(NSError*_Nullable*_Nullable)error;
 
 
 @end

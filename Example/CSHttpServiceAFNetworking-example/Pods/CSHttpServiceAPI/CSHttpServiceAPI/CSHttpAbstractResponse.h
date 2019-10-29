@@ -17,11 +17,11 @@ HTTP 响应抽象类
 /*
  响应数据
  */
-@property (nonatomic, copy) NSData *responseData;
+@property (nonatomic, copy) NSData * _Nonnull responseData;
 
 /*
  子类重写
  */
-+ (id<CSHttpResponse>)buildResponseWithString:(NSString* _Nonnull)responseString;
++ (id<CSHttpResponse>_Nonnull)buildResponseWithString:(NSString* _Nonnull)responseString;
 
 @end

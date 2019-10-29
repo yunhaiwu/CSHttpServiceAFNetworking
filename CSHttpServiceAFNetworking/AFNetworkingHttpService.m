@@ -191,8 +191,7 @@
         case CSHTTPMethodGET:
         {
             sessionDataTask = [self.sessionManager GET:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
-                [response setResponseData:responseObject];
+                id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                 [self execInterceptorAfterResponseHandle:response];
                 responseBlock(response, nil);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
@@ -214,7 +213,7 @@
                         }
                     }
                 } progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                    id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
+                    id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                     [response setResponseData:responseObject];
                     [self execInterceptorAfterResponseHandle:response];
                     responseBlock(response, nil);
@@ -223,7 +222,7 @@
                 }];
             } else {
                 sessionDataTask = [self.sessionManager POST:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                    id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
+                    id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                     [response setResponseData:responseObject];
                     [self execInterceptorAfterResponseHandle:response];
                     responseBlock(response, nil);
@@ -236,7 +235,7 @@
         case CSHTTPMethodPUT:
         {
             sessionDataTask = [self.sessionManager PUT:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
+                id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
                 responseBlock(response, nil);
@@ -248,7 +247,7 @@
         case CSHTTPMethodDELETE:
         {
             sessionDataTask = [self.sessionManager DELETE:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
+                id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
                 responseBlock(response, nil);
@@ -260,7 +259,7 @@
         case CSHTTPMethodPATCH:
         {
             sessionDataTask = [self.sessionManager PATCH:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
-                id<CSHttpResponse> response = [responseClass buildResponseWithData:responseObject];
+                id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
                 [response setResponseData:responseObject];
                 [self execInterceptorAfterResponseHandle:response];
                 responseBlock(response, nil);

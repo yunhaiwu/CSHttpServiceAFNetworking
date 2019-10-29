@@ -8,7 +8,7 @@ PODS:
   - AFNetworking/Serialization (3.2.1)
   - CocoaService (0.0.2):
     - WJLoggingAPI
-  - CSHttpServiceAPI (1.0.1):
+  - CSHttpServiceAPI (1.0.2):
     - CocoaService
   - Masonry (1.1.0)
   - WJLoggingAPI (2.0)
@@ -32,7 +32,7 @@ SPEC REPOS:
 SPEC CHECKSUMS:
   AFNetworking: b6f891fdfaed196b46c7a83cf209e09697b94057
   CocoaService: 4a58e08a268e9243f810a43757d0426851870e0a
-  CSHttpServiceAPI: cbacb15809d0b922d58f396257e658d326f74b09
+  CSHttpServiceAPI: 44728ed78f8b9b33bb0d88424ae6769ae3d41d19
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
   WJLoggingAPI: 183581a351d51f93ec9900a3cc5f2df15b907de3
 

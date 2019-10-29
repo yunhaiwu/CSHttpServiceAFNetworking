@@ -14,5 +14,6 @@
 #import "CSHttpServiceConfig.h"
 #import "CSHttpAbstractRequest.h"
 #import "CSHttpAbstractResponse.h"
+#import "CSHttpResponseBuilder.h"
 
 #endif /* CSHttpServiceAPI_h */

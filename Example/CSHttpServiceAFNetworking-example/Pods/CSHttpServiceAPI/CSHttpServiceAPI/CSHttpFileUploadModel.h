@@ -11,18 +11,18 @@
 __attribute__((objc_subclassing_restricted))
 @interface CSHttpFileUploadModel : NSObject
 
-@property(nonatomic, copy) NSString *requestKey;
+@property(nonatomic, copy) NSString * _Nullable requestKey;
 
 //mime type
-@property(nonatomic, copy) NSString *mimeType;
+@property(nonatomic, copy) NSString * _Nullable mimeType;
 
 //文件路径
-@property(nonatomic, copy) NSString *filePath;
+@property(nonatomic, copy) NSString * _Nullable filePath;
 
 //文件名
-@property(nonatomic, copy) NSString *fileName;
+@property(nonatomic, copy) NSString * _Nullable fileName;
 
-- (instancetype)initWithRequestKey:(NSString*)requestKey mimeType:(NSString*)mimeType fileName:(NSString*)fileName filePath:(NSString*)filePath;
+- (instancetype _Nonnull)initWithRequestKey:(NSString* _Nullable)requestKey mimeType:(NSString* _Nullable)mimeType fileName:(NSString* _Nullable)fileName filePath:(NSString* _Nullable)filePath;
 
 /*
  文件是否存在

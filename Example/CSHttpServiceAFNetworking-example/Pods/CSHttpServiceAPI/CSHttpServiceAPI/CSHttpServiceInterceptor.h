@@ -18,11 +18,11 @@
 /*
  请求响应前
  */
--(BOOL)preRequestHandle:(id<CSHttpRequest>)request;
+-(BOOL)preRequestHandle:(id<CSHttpRequest> _Nonnull)request;
 
 /*
  请求响应后
  */
--(void)afterResponseHandle:(id<CSHttpResponse>)response;
+-(void)afterResponseHandle:(id<CSHttpResponse> _Nonnull)response;
 
 @end

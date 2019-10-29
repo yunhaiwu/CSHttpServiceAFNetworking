@@ -14,12 +14,12 @@
 /*
  响应数据
  */
-@property (nonatomic, copy) NSData *responseData;
+@property (nonatomic, copy) NSData * _Nonnull responseData;
 
 /*
  构建响应对象
  */
-+ (id<CSHttpResponse>)buildResponseWithData:(NSData*)responseData;
++ (id<CSHttpResponse>_Nonnull)buildResponseWithData:(NSData*_Nonnull)responseData;
 
 
 @optional
@@ -32,11 +32,11 @@
 /*
  服务端返回的逻辑错误码
  */
-- (NSString*)errorCode;
+- (NSString*_Nonnull)errorCode;
 
 /*
  服务端返回的逻辑错误说明
  */
-- (NSString*)errorMessage;
+- (NSString*_Nonnull)errorMessage;
 
 @end
