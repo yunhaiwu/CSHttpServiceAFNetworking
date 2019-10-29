@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
 
 
 s.name         = "CSHttpServiceAFNetworking"
-s.version      = "1.0.0"
+s.version      = "1.0.1"
 s.summary      = "基于AFNetworking对CSHttpServiceAPI实现."
 
 s.description  = <<-DESC
