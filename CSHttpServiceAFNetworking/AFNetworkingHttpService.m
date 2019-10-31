@@ -97,7 +97,7 @@
     if (self) {
         id<AFHttpServiceSessionManagerFactory> factory = [[[CocoaService sharedInstance] applicationContext] fetchService:@protocol(AFHttpServiceSessionManagerFactory)];
         if (factory) {
-            self.sessionManager = [factory getSessionManager];
+            self.sessionManager = [factory buildSessionManager];
             NSAssert(_sessionManager != nil, @"[CSHttpServiceAFNetworking] %@ getSessionManager return nil error.", NSStringFromClass([factory class]));
         } else {
             self.sessionManager = [[AFHTTPSessionManager alloc] initWithSessionConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration]];

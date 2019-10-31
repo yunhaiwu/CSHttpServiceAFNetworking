@@ -9,6 +9,8 @@
 #import <Foundation/Foundation.h>
 #import <CSHttpServiceAPI/CSHttpAbstractRequest.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @interface SimpleAFHttpServiceRequest : CSHttpAbstractRequest
 
 @property (nonatomic, copy) NSURL *reqURL;
@@ -22,3 +24,5 @@
 @property (nonatomic, assign) int reqTimeout;
 
 @end
+
+NS_ASSUME_NONNULL_END

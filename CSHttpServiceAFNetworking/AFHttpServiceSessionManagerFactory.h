@@ -10,8 +10,12 @@
 #import <CocoaService/CocoaService.h>
 #import <AFNetworking/AFHTTPSessionManager.h>
 
+NS_ASSUME_NONNULL_BEGIN
+
 @protocol AFHttpServiceSessionManagerFactory <CSService>
 
-- (AFHTTPSessionManager*)getSessionManager;
+- (AFHTTPSessionManager*)buildSessionManager;
 
 @end
+
+NS_ASSUME_NONNULL_END
