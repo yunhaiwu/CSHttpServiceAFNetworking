@@ -1,1 +1,0 @@
-../../../WJLoggingAPI/Classes/IWJLogger.h
