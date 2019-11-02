@@ -64,15 +64,24 @@
 }
 
 - (void)buttonExec:(id)sender {
-    id<CSHttpService> httpService = CSFetchService(@protocol(CSHttpService));
-    [httpService requestWithURL:[NSURL URLWithString:@"https://www.baidu.com"] method:CSHTTPMethodGET params:nil headers:nil responseBlock:^(NSData *responseData, NSError *error) {
+//    id<CSHttpService> httpService = CSFetchService(@protocol(CSHttpService));
+//    [httpService requestWithURL:[NSURL URLWithString:@"https://www.baidu.com"] method:CSHTTPMethodGET params:nil headers:nil responseBlock:^(NSData *responseData, NSError *error) {
+//        if (error) {
+//            [self.responseLabel setText:error.userInfo[NSLocalizedDescriptionKey]];
+//        } else {
+//            NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+//            [self.responseLabel setText:responseStr];
+//        }
+//    }];
+    
+    CSHttpServiceSugar.GET([NSURL URLWithString:@"https://www.baidu.com"]).submit(^(NSData *resData, NSError *error) {
         if (error) {
             [self.responseLabel setText:error.userInfo[NSLocalizedDescriptionKey]];
         } else {
-            NSString *responseStr = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+            NSString *responseStr = [[NSString alloc] initWithData:resData encoding:NSUTF8StringEncoding];
             [self.responseLabel setText:responseStr];
         }
-    }];
+    });
 }
 
 @end
