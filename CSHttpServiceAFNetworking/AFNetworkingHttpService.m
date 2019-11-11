@@ -11,8 +11,9 @@
 #import <AFNetworking/AFHTTPSessionManager.h>
 #import "SimpleAFHttpServiceRequest.h"
 #import "SimpleAFHttpServiceResponse.h"
+#import "CSHttpServiceInterceptorWrapper.h"
+#import <objc/runtime.h>
 #import <WJLoggingAPI/WJLoggingAPI.h>
-
 
 @interface SimpleAFHttpTaskModel : NSObject<CSHttpTask>
 
@@ -59,13 +60,58 @@
 @end
 
 
+
+@interface SimpleAFRequestInfoModel : NSObject
+
+@property (nonatomic, strong) id<CSHttpRequest> request;
+
+@property (nonatomic, copy) CSHttpServiceResponseBlock responseBlock;
+
+@end
+
+@implementation SimpleAFRequestInfoModel
+
+- (instancetype)initWithRequest:(id<CSHttpRequest>)request responseBlock:(CSHttpServiceResponseBlock)responseBlock {
+    self = [super init];
+    if (self) {
+        _request = request;
+        self.responseBlock = responseBlock;
+    }
+    return self;
+}
+
+@end
+
+@interface NSURLSessionTask (AFRequestInfo)
+
+- (void)setAfRequestInfo:(SimpleAFRequestInfoModel *)afRequestInfo;
+
+- (SimpleAFRequestInfoModel *)afRequestInfo;
+
+@end
+
+@implementation NSURLSessionTask (AFRequestInfo)
+
+- (void)setAfRequestInfo:(SimpleAFRequestInfoModel *)afRequestInfo {
+    objc_setAssociatedObject(self, @selector(afRequestInfo), afRequestInfo, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (SimpleAFRequestInfoModel *)afRequestInfo {
+    return objc_getAssociatedObject(self, @selector(afRequestInfo));
+}
+
+@end
+
+
+
+
 @interface AFNetworkingHttpService ()
 
 @property (nonatomic, strong) AFHTTPSessionManager *sessionManager;
 
 @property (nonatomic, strong) id<CSHttpServiceConfig> httpServiceConfig;
 
-@property (nonatomic, copy) NSArray<id<CSHttpServiceInterceptor>> *httpServiceInterceptors;
+@property (nonatomic, copy) NSArray<CSHttpServiceInterceptorWrapper*> *httpServiceInterceptorWrappers;
 
 @end
 
@@ -114,26 +160,37 @@
             [[self.sessionManager operationQueue] setMaxConcurrentOperationCount:CSHttpServiceDefaultMaxConcurrentNumber];
         }
         
-        self.httpServiceInterceptors = [[[CocoaService sharedInstance] applicationContext] fetchServiceList:@protocol(CSHttpServiceInterceptor)];
+        NSArray<id<CSHttpServiceInterceptor>> *httpServiceInterceptors = [[[CocoaService sharedInstance] applicationContext] fetchServiceList:@protocol(CSHttpServiceInterceptor)];
+        if ([httpServiceInterceptors count]) {
+            NSMutableArray *interceptorWrappers = [[NSMutableArray alloc] initWithCapacity:[httpServiceInterceptors count]];
+            for (id<CSHttpServiceInterceptor> interceptor in httpServiceInterceptors) {
+                [interceptorWrappers addObject:[[CSHttpServiceInterceptorWrapper alloc] initWithInterceptor:interceptor]];
+            }
+            self.httpServiceInterceptorWrappers = interceptorWrappers;
+        }
     }
     return self;
 }
 
 - (BOOL)execInterceptorPreRequestHandle:(id<CSHttpRequest>)request error:(NSError**)error {
     BOOL canRequest = YES;
-    for (id<CSHttpServiceInterceptor> interceptor in _httpServiceInterceptors) {
-        canRequest = [interceptor preRequestHandle:request];
-        if (!canRequest) {
-            *error = [NSError errorWithDomain:@"AFNetworkingHttpService" code:1001 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ interceptor catch request ", NSStringFromClass([interceptor class])]}];
-            break;
+    for (CSHttpServiceInterceptorWrapper *interceptorWrapper in _httpServiceInterceptorWrappers) {
+        if ([interceptorWrapper hasPreRequestHandle]) {
+            canRequest = [interceptorWrapper.interceptor preRequestHandle:request];
+            if (!canRequest) {
+                *error = [NSError errorWithDomain:@"AFNetworkingHttpService" code:1001 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ interceptor catch request ", NSStringFromClass([interceptorWrapper.interceptor class])]}];
+                break;
+            }
         }
     }
     return canRequest;
 }
 
 - (void)execInterceptorAfterResponseHandle:(id<CSHttpResponse>)response {
-    for (id<CSHttpServiceInterceptor> interceptor in _httpServiceInterceptors) {
-        [interceptor afterResponseHandle:response];
+    for (CSHttpServiceInterceptorWrapper *interceptorWrapper in _httpServiceInterceptorWrappers) {
+        if ([interceptorWrapper hasAfterResponseHandle]) {
+            [interceptorWrapper.interceptor afterResponseHandle:response];
+        }
     }
 }
 
@@ -191,11 +248,14 @@
         case CSHTTPMethodGET:
         {
             sessionDataTask = [self.sessionManager GET:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
                 id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
+                [response setRequest:model.request];
                 [self execInterceptorAfterResponseHandle:response];
-                responseBlock(response, nil);
+                model.responseBlock(response, nil);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                responseBlock(nil, error);
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                model.responseBlock(nil, error);
             }];
         }
             break;
@@ -213,21 +273,25 @@
                         }
                     }
                 } progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    SimpleAFRequestInfoModel *model = [task afRequestInfo];
                     id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
-                    [response setResponseData:responseObject];
+                    [response setRequest:model.request];
                     [self execInterceptorAfterResponseHandle:response];
-                    responseBlock(response, nil);
+                    model.responseBlock(response, nil);
                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                    responseBlock(nil, error);
+                    SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                    model.responseBlock(nil, error);
                 }];
             } else {
                 sessionDataTask = [self.sessionManager POST:requestURL parameters:requestParams progress:NULL success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                    SimpleAFRequestInfoModel *model = [task afRequestInfo];
                     id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
-                    [response setResponseData:responseObject];
+                    [response setRequest:model.request];
                     [self execInterceptorAfterResponseHandle:response];
-                    responseBlock(response, nil);
+                    model.responseBlock(response, nil);
                 } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                    responseBlock(nil, error);
+                    SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                    model.responseBlock(nil, error);
                 }];
             }
         }
@@ -235,42 +299,52 @@
         case CSHTTPMethodPUT:
         {
             sessionDataTask = [self.sessionManager PUT:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
                 id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
-                [response setResponseData:responseObject];
+                [response setRequest:model.request];
                 [self execInterceptorAfterResponseHandle:response];
-                responseBlock(response, nil);
+                model.responseBlock(response, nil);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                responseBlock(nil, error);
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                model.responseBlock(nil, error);
             }];
         }
             break;
         case CSHTTPMethodDELETE:
         {
             sessionDataTask = [self.sessionManager DELETE:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
                 id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
-                [response setResponseData:responseObject];
+                [response setRequest:model.request];
                 [self execInterceptorAfterResponseHandle:response];
-                responseBlock(response, nil);
+                model.responseBlock(response, nil);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                responseBlock(nil, error);
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                model.responseBlock(nil, error);
             }];
         }
             break;
         case CSHTTPMethodPATCH:
         {
             sessionDataTask = [self.sessionManager PATCH:requestURL parameters:requestParams success:^(NSURLSessionDataTask * _Nonnull task, id  _Nullable responseObject) {
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
                 id<CSHttpResponse> response = [CSHttpResponseBuilder buildResponseWithData:responseObject responseClass:responseClass];
-                [response setResponseData:responseObject];
+                [response setRequest:model.request];
                 [self execInterceptorAfterResponseHandle:response];
-                responseBlock(response, nil);
+                model.responseBlock(response, nil);
             } failure:^(NSURLSessionDataTask * _Nullable task, NSError * _Nonnull error) {
-                responseBlock(nil, error);
+                SimpleAFRequestInfoModel *model = [task afRequestInfo];
+                model.responseBlock(nil, error);
             }];
         }
         default:
             break;
     }
-    if (sessionDataTask) httpTask = [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionDataTask];
+    if (sessionDataTask) {
+        SimpleAFRequestInfoModel *model = [[SimpleAFRequestInfoModel alloc] initWithRequest:request responseBlock:responseBlock];
+        [sessionDataTask setAfRequestInfo:model];
+        httpTask = [[SimpleAFHttpTaskModel alloc] initWithSessionTask:sessionDataTask];
+    }
     return httpTask;
 }
 

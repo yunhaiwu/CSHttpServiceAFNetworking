@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		5D28BCB44623D4A3A6E97D55 /* libPods-CSHttpServiceAFNetworking-example.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 973321B19FAA284ECB3EA314 /* libPods-CSHttpServiceAFNetworking-example.a */; };
+		60059BE82379614B00E2F67A /* CSHttpServiceInterceptorWrapper.m in Sources */ = {isa = PBXBuildFile; fileRef = 60059BE72379614B00E2F67A /* CSHttpServiceInterceptorWrapper.m */; };
 		60B7EE5D236146E500FA897C /* SimpleAFHttpServiceRequest.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B7EE56236146E400FA897C /* SimpleAFHttpServiceRequest.m */; };
 		60B7EE5E236146E500FA897C /* SimpleAFHttpServiceResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B7EE5B236146E400FA897C /* SimpleAFHttpServiceResponse.m */; };
 		60B7EE5F236146E500FA897C /* AFNetworkingHttpService.m in Sources */ = {isa = PBXBuildFile; fileRef = 60B7EE5C236146E400FA897C /* AFNetworkingHttpService.m */; };
@@ -40,6 +41,8 @@
 /* Begin PBXFileReference section */
 		1BC0FFC02093CBF1E62309DD /* Pods-CSHttpServiceAFNetworking-example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CSHttpServiceAFNetworking-example.release.xcconfig"; path = "Target Support Files/Pods-CSHttpServiceAFNetworking-example/Pods-CSHttpServiceAFNetworking-example.release.xcconfig"; sourceTree = "<group>"; };
 		228E8DE8D27E9BCCE578B022 /* Pods-CSHttpServiceAFNetworking-example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CSHttpServiceAFNetworking-example.debug.xcconfig"; path = "Target Support Files/Pods-CSHttpServiceAFNetworking-example/Pods-CSHttpServiceAFNetworking-example.debug.xcconfig"; sourceTree = "<group>"; };
+		60059BE62379614B00E2F67A /* CSHttpServiceInterceptorWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CSHttpServiceInterceptorWrapper.h; sourceTree = "<group>"; };
+		60059BE72379614B00E2F67A /* CSHttpServiceInterceptorWrapper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = CSHttpServiceInterceptorWrapper.m; sourceTree = "<group>"; };
 		60B7EE56236146E400FA897C /* SimpleAFHttpServiceRequest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimpleAFHttpServiceRequest.m; sourceTree = "<group>"; };
 		60B7EE57236146E400FA897C /* AFHttpServiceSessionManagerFactory.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AFHttpServiceSessionManagerFactory.h; sourceTree = "<group>"; };
 		60B7EE58236146E400FA897C /* SimpleAFHttpServiceResponse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimpleAFHttpServiceResponse.h; sourceTree = "<group>"; };
@@ -116,6 +119,8 @@
 				60B7EE57236146E400FA897C /* AFHttpServiceSessionManagerFactory.h */,
 				60B7EE59236146E400FA897C /* AFNetworkingHttpService.h */,
 				60B7EE5C236146E400FA897C /* AFNetworkingHttpService.m */,
+				60059BE62379614B00E2F67A /* CSHttpServiceInterceptorWrapper.h */,
+				60059BE72379614B00E2F67A /* CSHttpServiceInterceptorWrapper.m */,
 				60B7EE5A236146E400FA897C /* SimpleAFHttpServiceRequest.h */,
 				60B7EE56236146E400FA897C /* SimpleAFHttpServiceRequest.m */,
 				60B7EE58236146E400FA897C /* SimpleAFHttpServiceResponse.h */,
@@ -344,6 +349,7 @@
 				60B7EE5D236146E500FA897C /* SimpleAFHttpServiceRequest.m in Sources */,
 				60B7EE5E236146E500FA897C /* SimpleAFHttpServiceResponse.m in Sources */,
 				60F8E53E2359876E00675FFB /* main.m in Sources */,
+				60059BE82379614B00E2F67A /* CSHttpServiceInterceptorWrapper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
