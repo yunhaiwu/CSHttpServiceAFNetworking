@@ -13,7 +13,6 @@
 #import "SimpleAFHttpServiceResponse.h"
 #import "CSHttpServiceInterceptorWrapper.h"
 #import <objc/runtime.h>
-#import <WJLoggingAPI/WJLoggingAPI.h>
 
 @interface SimpleAFHttpTaskModel : NSObject<CSHttpTask>
 

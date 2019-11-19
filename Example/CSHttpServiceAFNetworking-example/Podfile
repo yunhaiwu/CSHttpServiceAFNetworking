@@ -9,7 +9,6 @@ inhibit_all_warnings!
 
 target :'CSHttpServiceAFNetworking-example' do
 
-pod 'WJLoggingAPI'
 pod 'CocoaService'
 pod 'CSHttpServiceAPI', '~> 1.0.0'
 pod 'AFNetworking/NSURLSession', '~> 3.0'
