@@ -1,14 +1,14 @@
 //
-//  CSHttpServiceInterceptorWrapper.m
+//  AFHttpServiceInterceptorWrapper.m
 //  CSHttpServiceAFNetworking-example
 //
 //  Created by wuyunhai on 2019/11/11.
 //  Copyright © 2019 wuyunhai. All rights reserved.
 //
 
-#import "CSHttpServiceInterceptorWrapper.h"
+#import "AFHttpServiceInterceptorWrapper.h"
 
-@implementation CSHttpServiceInterceptorWrapper
+@implementation AFHttpServiceInterceptorWrapper
 
 - (instancetype)initWithInterceptor:(id<CSHttpServiceInterceptor>)interceptor {
     self = [super init];

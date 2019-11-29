@@ -1,5 +1,5 @@
 //
-//  SimpleAFHttpServiceResponse.h
+//  AFHttpServiceResponse.h
 //  CSHttpServiceAFNetworking
 //
 //  Created by 吴云海
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SimpleAFHttpServiceResponse : CSHttpAbstractResponse
+@interface AFHttpServiceResponse : CSHttpAbstractResponse
 
 @end
 

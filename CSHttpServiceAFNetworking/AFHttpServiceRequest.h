@@ -1,5 +1,5 @@
 //
-//  SimpleAFHttpServiceRequest.h
+//  AFHttpServiceRequest.h
 //  CSHttpServiceAFNetworking
 //
 //  Created by 吴云海
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface SimpleAFHttpServiceRequest : CSHttpAbstractRequest
+@interface AFHttpServiceRequest : CSHttpAbstractRequest
 
 @property (nonatomic, copy) NSURL *reqURL;
 

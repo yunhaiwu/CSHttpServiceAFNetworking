@@ -1,5 +1,5 @@
 //
-//  CSHttpServiceInterceptorWrapper.h
+//  AFHttpServiceInterceptorWrapper.h
 //  CSHttpServiceAFNetworking-example
 //
 //  Created by wuyunhai on 2019/11/11.
@@ -11,7 +11,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface CSHttpServiceInterceptorWrapper : NSObject
+@interface AFHttpServiceInterceptorWrapper : NSObject
 
 @property (nonatomic, strong) id<CSHttpServiceInterceptor> interceptor;
 

@@ -1,14 +1,14 @@
 //
-//  SimpleAFHttpServiceRequest.h
+//  AFHttpServiceRequest.h
 //  CSHttpServiceAFNetworking
 //
 //  Created by 吴云海
 //  Copyright © 2018年 yunhai.wu. All rights reserved.
 //
 
-#import "SimpleAFHttpServiceRequest.h"
+#import "AFHttpServiceRequest.h"
 
-@implementation SimpleAFHttpServiceRequest
+@implementation AFHttpServiceRequest
 
 - (NSURL*)url {
     return _reqURL;
