@@ -156,7 +156,9 @@
         if ([interceptorWrapper hasPreRequestHandle]) {
             canRequest = [interceptorWrapper.interceptor preRequestHandle:context];
             if (!canRequest) {
-                *error = [NSError errorWithDomain:@"AFNetworkingHttpService" code:1001 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ interceptor catch request ", NSStringFromClass([interceptorWrapper.interceptor class])]}];
+                if (error != NULL) {
+                    *error = [NSError errorWithDomain:@"AFNetworkingHttpService" code:1001 userInfo:@{NSLocalizedDescriptionKey:[NSString stringWithFormat:@"%@ interceptor catch request ", NSStringFromClass([interceptorWrapper.interceptor class])]}];
+                }
                 break;
             }
         }
