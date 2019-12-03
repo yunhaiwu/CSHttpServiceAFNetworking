@@ -64,7 +64,7 @@
 }
 
 - (void)buttonExec:(id)sender {
-//    id<CSHttpService> httpService = CSFetchService(@protocol(CSHttpService));
+//    id<CSHttpService> httpService = CSGetService(@protocol(CSHttpService));
 //    [httpService requestWithURL:[NSURL URLWithString:@"https://www.baidu.com"] method:CSHTTPMethodGET params:nil headers:nil responseBlock:^(NSData *responseData, NSError *error) {
 //        if (error) {
 //            [self.responseLabel setText:error.userInfo[NSLocalizedDescriptionKey]];

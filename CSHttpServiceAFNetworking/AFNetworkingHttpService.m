@@ -119,7 +119,7 @@
 - (instancetype)init {
     self = [super init];
     if (self) {
-        id<AFHttpServiceSessionManagerFactory> factory = [[[CocoaService sharedInstance] applicationContext] fetchService:@protocol(AFHttpServiceSessionManagerFactory)];
+        id<AFHttpServiceSessionManagerFactory> factory = [[[CocoaService sharedInstance] applicationContext] getService:@protocol(AFHttpServiceSessionManagerFactory)];
         if (factory) {
             self.sessionManager = [factory buildSessionManager];
             NSAssert(_sessionManager != nil, @"[CSHttpServiceAFNetworking] %@ getSessionManager return nil error.", NSStringFromClass([factory class]));
@@ -131,14 +131,14 @@
             [self.sessionManager.securityPolicy setAllowInvalidCertificates:YES];
         }
         
-        self.httpServiceConfig = [[[CocoaService sharedInstance] applicationContext] fetchService:@protocol(CSHttpServiceConfig)];
+        self.httpServiceConfig = [[[CocoaService sharedInstance] applicationContext] getService:@protocol(CSHttpServiceConfig)];
         if (_httpServiceConfig) {
             [[self.sessionManager operationQueue] setMaxConcurrentOperationCount:[_httpServiceConfig maxConcurrentNumber]];
         } else {
             [[self.sessionManager operationQueue] setMaxConcurrentOperationCount:CSHttpServiceDefaultMaxConcurrentNumber];
         }
         
-        NSArray<id<CSHttpServiceInterceptor>> *httpServiceInterceptors = [[[CocoaService sharedInstance] applicationContext] fetchServiceList:@protocol(CSHttpServiceInterceptor)];
+        NSArray<id<CSHttpServiceInterceptor>> *httpServiceInterceptors = [[[CocoaService sharedInstance] applicationContext] getServiceList:@protocol(CSHttpServiceInterceptor)];
         if ([httpServiceInterceptors count]) {
             NSMutableArray *interceptorWrappers = [[NSMutableArray alloc] initWithCapacity:[httpServiceInterceptors count]];
             for (id<CSHttpServiceInterceptor> interceptor in httpServiceInterceptors) {
