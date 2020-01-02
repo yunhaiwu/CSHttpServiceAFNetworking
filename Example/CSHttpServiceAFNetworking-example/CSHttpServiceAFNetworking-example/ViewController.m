@@ -75,7 +75,7 @@
 //    }];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        CSHttpServiceSugar.GET([NSURL URLWithString:@"https://www.baidu.com"]).submit(^(NSData *resData, NSError *error) {
+        CSHttpServiceBuilder.GET([NSURL URLWithString:@"https://www.baidu.com"]).submit(^(NSData *resData, NSError *error) {
             if (error) {
                 [self.responseLabel setText:error.userInfo[NSLocalizedDescriptionKey]];
             } else {
